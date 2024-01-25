@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/25 16:45:50 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/01/25 17:38:55 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,27 @@ class	Client {
 		bool		isRegistered(void) {
 			return (this->_registered);
 		}
+
+	// Setters
+		void	setUsername(std::string username){
+			this->_username = username;
+		}
+		
+		void	setNickname(std::string nickname){
+			this->_nickname = nickname;
+		}
+
+		void	setSocket(int socket){
+			this->_clientSocket = socket;
+		}
+
+		void	setLogged(bool logged){
+			this->_logged = logged;
+		}
+
+		void	setRegistered(bool registered){
+			this->_registered = registered;
+		}
 };
 
 class	Server {
@@ -83,7 +104,7 @@ class	Server {
 		void	handleClient(int clientSocket);
 		std::string	handleRequest(Client &client, std::string request);
 		std::vector<std::string>	splitRequest(std::string request);
-		std::string	logClient(Client &client, std::string request);
+		std::string	logClient(Client &client, std::vector<std::string> cmd);
 		
 	// Getters
 		const int	getPort(void) {

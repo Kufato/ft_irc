@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:10:15 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/25 16:57:53 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/01/25 18:22:58 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	Server::lauchServer(void) {
 			if (events[i].data.fd == this->_serverSocket)
 				handleNewClient();
 			else
-				// parse request
+				handleClient(events[i].data.fd);
 		}
 	}
 	return ;
@@ -85,6 +85,13 @@ void	Server::handleNewClient(void) {
 	return ;
 }
 
+/**
+ * Read the data sent by a client.
+ * 
+ * The data can be received incorrectly, and the connection can be closed by the client.
+ * 
+ * @param clientSocket the socket of the client sending data.
+*/
 void	Server::handleClient(int clientSocket)
 {
 	char	buff[2048];
@@ -99,20 +106,27 @@ void	Server::handleClient(int clientSocket)
 				std::cerr << "Error receiving data from client." << std::endl;
 			break;
 		}
-		std::string	msg = this->handleRequest(NULL, buff);
+		Client client = NULL; // need to get the adress of the client object whose socket = clientSocket
+		std::string	msg = this->handleRequest(client, buff);
 		if (msg != "")
 			send(clientSocket, msg.c_str(), msg.length(), 0);
 	}
 }
 
+/**
+ * Split the request into a vector of strings, separated by spaces.
+ * 
+ * @param request the data sent by the client.
+ * @return vector containing all the arguments present in the request.
+*/
 std::vector<std::string>	Server::splitRequest(std::string request)
 {
 	std::vector<std::string>	res;
-	int pos = 0;
-	int posend;
+	size_t pos = 0;
+	size_t posend = 0;
 	while (pos != std::string::npos)
 	{
-		pos = request.find_first_not_of(' ', pos);
+		pos = request.find_first_not_of(' ', posend);
 		if (pos != std::string::npos)
 		{
 			posend = request.find(' ', pos);
@@ -124,15 +138,21 @@ std::vector<std::string>	Server::splitRequest(std::string request)
 	return (res);
 }
 
+/**
+ * Parse the request of a client and execute it if possible.
+ * 
+ * @param client the client who sent the request.
+ * @param request the data sent by the client.
+ * @return the message to send back to the client.
+*/
 std::string	Server::handleRequest(Client &client, std::string request)
 {
-	size_t pos = request.find_first_of(' ');
-	std::string cmd = request.substr(0, pos);
-		std::string commands[7] = {"PASS", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE"};
+	std::vector<std::string> cmd = this->splitRequest(request);
+	std::string commands[7] = {"PASS", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE"};
 	int i;
 	for (i = 0; i < 7; i++)
 	{
-		if (cmd == commands[i])
+		if (cmd[0] == commands[i])
 			break;
 	}
 	if (i && !client.isLogged())
@@ -142,13 +162,26 @@ std::string	Server::handleRequest(Client &client, std::string request)
 	switch (i)
 	{
 		case 0:
-			return (this->logClient(client, request));
+			return (this->logClient(client, cmd));
 	}
 }
 
-std::string	Server::logClient(Client &client, std::string request)
+/**
+ * Tries to log the client using the password they provided.
+ * 
+ * @param client the client who tries to log in.
+ * @param cmd the request separated in args (first one is "PASS", second one is the value, ...)
+ * @return the message to send back to the client.
+*/
+std::string	Server::logClient(Client &client, std::vector<std::string> cmd)
 {
-	size_t	pos = request.find("PASS");
-	pos = request.find_first_not_of(' ', pos + 4);
-	
+	if (cmd.size() != 2)
+		return ("Incorrect number of argument.");
+	if (this->_password == cmd[1])
+	{
+		client.setLogged(true);
+		return ("Successfully logged to the server.");
+	}
+	else
+		return ("Password incorrect, try again.");
 }
