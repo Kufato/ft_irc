@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/24 18:28:50 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/01/25 13:15:03 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
-#include <arpa/inet.h>
 #include <unistd.h>
+#include <arpa/inet.h>
+#include <sys/epoll.h>
 
 class	Client {
 
@@ -36,10 +37,12 @@ class	Client {
 class	Server {
 
 	private:
-		const int			_port;
-		const int			_socket;
-		const std::string	_password;
-		const sockaddr_in	_serverAddr;
+		int			_port;
+		int			_serverSocket;
+		int			_epollFd;
+		epoll_event	_event;
+		std::string	_password;
+		sockaddr_in	_serverAddr;
 
 	public:
 	// Constructor
@@ -56,22 +59,4 @@ class	Server {
 		const std::string	getPassword(void) {
 			return (this->_password);
 		}
-	// Exceptions
-		class	SocketCreationException : public std::exception
-		{
-			public:
-				const char	*what() const throw();
-		};
-
-		class	SocketBindingException : public std::exception
-		{
-			public:
-				const char	*what() const throw();
-		};
-
-		class	ListenConnectionException : public std::exception
-		{
-			public:
-				const char	*what() const throw();
-		};
 };
