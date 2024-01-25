@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:04:34 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/25 11:12:43 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/01/25 13:42:44 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,13 @@ int main (int argc, char **argv) {
 		std::cerr << "Wrong number of arguments" << std::endl;
 		return (1);
 	}
-	int port = atoi(argv[1]);
 	Server server;
-	checkInfos(argv[1], argv[2], server);
-	server.launchServer();
+	if (!checkInfos(argv[1], argv[2], server)) {
+		std::cerr << "Wrong arguments" << std::endl;
+		return (1);
+	}
+	server.createServer();
+	server.lauchServer();
+	
 	return (0);
 }
