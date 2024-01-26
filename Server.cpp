@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:10:15 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/25 18:22:58 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/01/26 15:30:33 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,14 @@ Server::~Server(void) {
 	return ;
 }
 
-// Public methods
+// ++++++++++ Public methods ++++++++++
+
+/**
+ * Binding socket to port address.
+ * Listening to the socket
+ * Creation of the epoll instance
+ * Add server socket to epoll instance
+*/
 void	Server::createServer() {
 	if (bind(this->_serverSocket, (struct sockaddr*)&this->_serverAddr, sizeof(this->_serverAddr))) {
 		close (this->_serverSocket);
@@ -53,6 +60,11 @@ void	Server::createServer() {
 	return ;
 }
 
+/**
+ * Waiting for any event with the @param epoll_wait function and stock it
+ * 
+ * Check if the event is a new connection or another request
+*/
 void	Server::lauchServer(void) {
 	int					event_count;
 	struct epoll_event	events[100];
@@ -69,6 +81,15 @@ void	Server::lauchServer(void) {
 	return ;
 }
 
+/**
+ * Call the @param accept function to accept a new connection on the server's clientFd socket
+ * 
+ * Modifying clientFd properties with the @param fcntl function
+ * 
+ * Call @param epoll_ctl to add file descriptor fd to the set monitored by epoll
+ * 
+ * Insert the new client in a std::map
+*/
 void	Server::handleNewClient(void) {
 	int					clientFd;
 	struct sockaddr_in	clientAddr;
