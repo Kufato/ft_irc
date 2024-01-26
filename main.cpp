@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:04:34 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/26 15:08:57 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/01/26 17:00:09 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,16 @@ int main (int argc, char **argv) {
 		std::cerr << "Wrong number of arguments" << std::endl;
 		return (1);
 	}
-	Server server;
-	server.createServer();
-	server.lauchServer();
+	try
+	{
+		Server server;
+		server.createServer();
+		server.lauchServer();
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	
 	return (0);
 }

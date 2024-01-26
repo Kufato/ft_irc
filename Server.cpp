@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:10:15 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/26 15:30:33 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/01/26 18:27:36 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ Server::~Server(void) {
 */
 void	Server::createServer() {
 	if (bind(this->_serverSocket, (struct sockaddr*)&this->_serverAddr, sizeof(this->_serverAddr))) {
+		perror("caca");
 		close (this->_serverSocket);
 		throw std::logic_error("Couldn't bind socket.");
 	}
@@ -46,17 +47,18 @@ void	Server::createServer() {
 		close (this->_serverSocket);
 		throw std::logic_error("Couldn't listen for connections.");
 	}
-	if (this->_epollFd = epoll_create1(0)) {
+	if ((this->_epollFd = epoll_create1(0)) == -1) {
 		close (this->_serverSocket);
 		throw std::logic_error("Couldn't create the epoll instance.");
 	}
-	this->_event.events = EPOLLIN;
+	this->_event.events = EPOLLIN | EPOLLET;
 	this->_event.data.fd = this->_serverSocket;
 	if (epoll_ctl(this->_epollFd, EPOLL_CTL_ADD, this->_serverSocket, &this->_event)) {
 		close (this->_epollFd);
 		close (this->_serverSocket);
 		throw std::logic_error("Couldn't add the server socket to the epoll instance.");
 	}
+	std::cout << "Server created successfully." << std::endl;
 	return ;
 }
 
@@ -67,10 +69,11 @@ void	Server::createServer() {
 */
 void	Server::lauchServer(void) {
 	int					event_count;
-	struct epoll_event	events[100];
+	struct epoll_event	events[1024];
 
 	while (true) {
-		event_count = epoll_wait(this->_epollFd, events , 100, -1);
+		event_count = epoll_wait(this->_epollFd, events , 1024, -1);
+		std::cout << event_count << std::endl;
 		for (int i = 0; i < event_count; i++) {
 			if (events[i].data.fd == this->_serverSocket)
 				handleNewClient();
@@ -100,9 +103,12 @@ void	Server::handleNewClient(void) {
 	if (clientFd == -1)
 		throw std::logic_error("Couldn't accept new client");
 	fcntl(clientFd, F_SETFL, O_NONBLOCK);
+	this->_event.events = EPOLLIN;
+	this->_event.data.fd = clientFd;
 	if (epoll_ctl(this->_epollFd, EPOLL_CTL_ADD, clientFd, &this->_event))
 		throw std::logic_error("Couldn't add the new client");
 	this->_listClients.insert(std::pair<int, Client *>(clientFd, new Client(clientFd)));
+	std::cout << "Connection establish'ed sheeran" << std::endl;
 	return ;
 }
 
@@ -121,14 +127,16 @@ void	Server::handleClient(int clientSocket)
 	while (true) {
 		bytesRead = recv(clientSocket, buff, sizeof(buff), 0);
 		if (bytesRead <= 0) {
-			if (!bytesRead)	
+			if (!bytesRead)
 				std::cout << "Connection with client closed." << std::endl;
 			else
 				std::cerr << "Error receiving data from client." << std::endl;
 			break;
 		}
-		Client client = NULL; // need to get the adress of the client object whose socket = clientSocket
-		std::string	msg = this->handleRequest(client, buff);
+		std::cout << "Received : " << buff << std::endl;
+		std::map<int, Client*>::iterator it = _listClients.find(clientSocket);
+		Client *client = it->second ; // need to get the adress of the client object whose socket = clientSocket
+		std::string	msg = this->handleRequest(*client, buff);
 		if (msg != "")
 			send(clientSocket, msg.c_str(), msg.length(), 0);
 	}
@@ -185,6 +193,7 @@ std::string	Server::handleRequest(Client &client, std::string request)
 		case 0:
 			return (this->logClient(client, cmd));
 	}
+	return ("caca");
 }
 
 /**
