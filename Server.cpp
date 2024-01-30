@@ -6,20 +6,21 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:10:15 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/30 13:25:38 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/01/30 17:36:17 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 
 // Constructor/Destructor
-Server::Server(void) {
-	this->_port = 6969;
+Server::Server(int port, std::string password) {
+	this->_port = port;
+	this->_password = password;
 	this->_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->_serverSocket == -1)
 		throw std::logic_error("Couldn't create socket.");
 	this->_serverAddr.sin_family = AF_INET;
-	this->_serverAddr.sin_port = htons(6969);
+	this->_serverAddr.sin_port = htons(port);
 	this->_serverAddr.sin_addr.s_addr = INADDR_ANY;
 }
 
@@ -39,7 +40,7 @@ Server::~Server(void) {
 */
 void	Server::createServer() {
 	if (bind(this->_serverSocket, (struct sockaddr*)&this->_serverAddr, sizeof(this->_serverAddr))) {
-		perror("caca");
+		perror("Bind");
 		close (this->_serverSocket);
 		throw std::logic_error("Couldn't bind socket.");
 	}
@@ -109,6 +110,7 @@ void	Server::handleNewClient(void) {
 		throw std::logic_error("Couldn't add the new client");
 	this->_listClients.insert(std::pair<int, Client *>(clientFd, new Client(clientFd)));
 	std::cout << "Connection establish'ed sheeran" << std::endl;
+	send(clientFd, "Please enter the server's password using : PASS <password>\n", 59, 0);
 	return ;
 }
 
@@ -137,9 +139,10 @@ void	Server::handleClient(int clientSocket) {
 		std::cout << "Received : " << buff << std::endl;
 		std::map<int, Client*>::iterator it = _listClients.find(clientSocket);
 		Client *client = it->second ; // need to get the adress of the client object whose socket = clientSocket
+		client->setSocket(clientSocket);
 		std::string	msg = this->handleRequest(*client, buff);
-		// if (msg != "")
-		// 	send(clientSocket, msg.c_str(), msg.length(), 0);
+		if (msg != "")
+			send(clientSocket, msg.c_str(), msg.length(), 0);
 	}
 }
 
@@ -156,10 +159,16 @@ std::vector<std::string>	Server::splitRequest(std::string request)
 	size_t posend = 0;
 	while (pos != std::string::npos)
 	{
-		pos = request.find_first_not_of(' ', posend);
+		pos = request.find_first_not_of(" \n", posend);
 		if (pos != std::string::npos)
 		{
-			posend = request.find(' ', pos);
+			if (request[pos] == ':')
+			{
+				if (request[pos + 1])
+					res.push_back(request.substr(pos, request.length() - pos));
+				break;
+			}
+			posend = request.find_first_of(" \n", pos);
 			if (posend == std::string::npos)
 				posend = request.length();
 			res.push_back(request.substr(pos, posend - pos));
@@ -167,7 +176,7 @@ std::vector<std::string>	Server::splitRequest(std::string request)
 	}
 	return (res);
 }
-
+//labite
 /**
  * Parse the request of a client and execute it if possible.
  * 
@@ -178,41 +187,52 @@ std::vector<std::string>	Server::splitRequest(std::string request)
 std::string	Server::handleRequest(Client &client, std::string request)
 {
 	std::vector<std::string> cmd = this->splitRequest(request);
-	std::string commands[7] = {"PASS", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE"};
+	unsigned int vecSize = cmd.size();
+	std::cout << "Splitted request (" << vecSize << ") : ";
+	for(unsigned int i = 0; i < vecSize; i++)
+	{
+		std::cout << "\"" << cmd[i] << "\"" << " ";
+	}
+	std::cout << std::endl;
+	std::string commands[10] = {"PASS", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP"};
 	int i;
-	for (i = 0; i < 7; i++)
-	{
+	for (i = 0; i < 7; i++) {
 		if (cmd[0] == commands[i])
+		{
+			std::cout << "Found command " << commands[i] << std::endl;
 			break;
+		}
 	}
-	if (i && !client.isLogged())
-		return ("Please enter the server's password using : PASS <password>\n");
-	else if (i > 2 && !client.isRegistered())
-		return ("Please enter a nickname and a username using : NICK <nickname>  and  USER <username>\n");
-	switch (i)
+	if (i && !client.isRegistered())
+	if (i > 2 && !client.isLogged())
 	{
-		case 0:
-			return (this->logClient(client, cmd));
+		return ("use NICK and USER before dammit");
 	}
-	return ("caca");
+	switch (i) {
+		case 0:
+			return (this->pass(client, cmd));
+		case 1:
+			this->nick(client, cmd);
+		case 2:
+			return (this->user(client, cmd));
+	}
+	return ("amené gros\n");
 }
 
-/**
- * Tries to log the client using the password they provided.
- * 
- * @param client the client who tries to log in.
- * @param cmd the request separated in args (first one is "PASS", second one is the value, ...)
- * @return the message to send back to the client.
-*/
-std::string	Server::logClient(Client &client, std::vector<std::string> cmd)
-{
-	if (cmd.size() != 2)
-		return ("Incorrect number of argument.");
-	if (this->_password == cmd[1])
-	{
-		client.setLogged(true);
-		return ("Successfully logged to the server.");
+bool	Server::searchNickname(std::string nickname) {
+	for (std::map<int, Client *>::iterator it = this->_listClients.begin(); it != this->_listClients.end(); it++) {
+		if (it->second->getNickname() == nickname)
+			return (true);
 	}
-	else
-		return ("Password incorrect, try again.");
+	return (false);
+}
+
+std::string Server::help(void) {
+	return ("Here is the list of all available commands :\nPASS : use it when you need to log and enter the password\nNICK : set a new NickName\nUSER : set a new UserName\nKICK : eject a client from the channel\nINVITE : invite a client to a channel\nTOPIC : change or view the channel topic\nMODE : change the channel's mode\n	i: set/remove invite only channel\n	t: set/remove the restrictions of the TOPIC command to channel operators\n	k: set/remove the channel key (password)\n	o: give/take channel operator privilege\n	l: set/remove the user limit to channel\nPRIVMSG : send a private message\nJOIN : joins a channel\n");
+}
+
+void	Server::dispLogs(std::string str, int clientFD) {
+	std::string tmp = "[IRC] Error: ";
+	tmp += str;
+	send(clientFD, tmp, sizeof(tmp), 0);
 }

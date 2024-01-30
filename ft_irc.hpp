@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/30 11:25:08 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/01/30 17:27:37 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@
 #include <arpa/inet.h>
 #include <sys/epoll.h>
 
- #include <stdio.h>
+#include <stdio.h>
 
 class	Client {
 
 	private:
-		int			_clientSocket;
+		int			_socket;
 		bool		_logged;
 		bool		_registered;
 		std::string	_username;
@@ -50,7 +50,7 @@ class	Client {
 		}
 
 		int			getSocket(void) {
-			return (this->_clientSocket);
+			return (this->_socket);
 		}
 
 		bool		isLogged(void) {
@@ -71,7 +71,7 @@ class	Client {
 		}
 
 		void	setSocket(int socket){
-			this->_clientSocket = socket;
+			this->_socket = socket;
 		}
 
 		void	setLogged(bool logged){
@@ -96,18 +96,27 @@ class	Server {
 
 	public:
 	// Constructor
-		Server(void);
+		Server(int port, std::string password);
 	// Destructor
-		~Server(void);
+		~Server(void); 
 	// Public methods
 		void	createServer(void);
 		void	lauchServer(void);
 		void	handleNewClient(void);
 		void	handleClient(int clientSocket);
-		std::string	handleRequest(Client &client, std::string request);
 		std::vector<std::string>	splitRequest(std::string request);
-		std::string	logClient(Client &client, std::vector<std::string> cmd);
+		std::string	handleRequest(Client &client, std::string request);
+	
+	// Commands
+		std::string help(void);
+		void nick(Client &client, std::vector<std::string> cmd);
+		void user(Client &client, std::vector<std::string> cmd);
+		void pass(Client &client, std::vector<std::string> cmd);
 		
+	// Utils
+		void	dispLogs(std::string str, int clientFD);
+		bool	searchNickname(std::string nickname);
+
 	// Getters
 		int	getPort(void) {
 			return (this->_port);
