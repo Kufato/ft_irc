@@ -6,7 +6,7 @@
 #    By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 11:26:17 by axcallet          #+#    #+#              #
-#    Updated: 2024/01/24 11:36:12 by axcallet         ###   ########.fr        #
+#    Updated: 2024/01/30 11:02:00 by axcallet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,9 @@ CFLAGS		= -Wall -Werror -Wextra -std=c++98 -g3
 
 OBJ_DIR		= obj
 OBJ			= $(SRC:.cpp=.o)
-SRC			= 
+SRC			= main.cpp	\
+			Client.cpp	\
+			Server.cpp
 
 ########## RULES ##########
 

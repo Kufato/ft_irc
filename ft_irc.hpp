@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/25 17:38:55 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/01/30 11:25:08 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <map>
+#include <vector>
 #include <fcntl.h>
 #include <cstdlib>
 #include <cstring>
@@ -20,7 +21,8 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/epoll.h>
-#include <vector>
+
+ #include <stdio.h>
 
 class	Client {
 
@@ -107,11 +109,11 @@ class	Server {
 		std::string	logClient(Client &client, std::vector<std::string> cmd);
 		
 	// Getters
-		const int	getPort(void) {
+		int	getPort(void) {
 			return (this->_port);
 		}
 
-		const std::string	getPassword(void) {
+		std::string	getPassword(void) {
 			return (this->_password);
 		}
 };

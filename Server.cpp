@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:10:15 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/26 18:27:36 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/01/30 13:25:38 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,26 +119,27 @@ void	Server::handleNewClient(void) {
  * 
  * @param clientSocket the socket of the client sending data.
 */
-void	Server::handleClient(int clientSocket)
-{
-	char	buff[2048];
-	int		bytesRead;
+void	Server::handleClient(int clientSocket) {
+	int			bytesRead;
+	char		buff[2048];
+	std::string	strBuff;
 	
-	while (true) {
-		bytesRead = recv(clientSocket, buff, sizeof(buff), 0);
+	memset(&buff, 0, sizeof(buff));
+	bytesRead = recv(clientSocket, buff, sizeof(buff), 0);
+	strBuff = buff;
+	if (strBuff.find("/n")) {
 		if (bytesRead <= 0) {
 			if (!bytesRead)
 				std::cout << "Connection with client closed." << std::endl;
 			else
 				std::cerr << "Error receiving data from client." << std::endl;
-			break;
 		}
 		std::cout << "Received : " << buff << std::endl;
 		std::map<int, Client*>::iterator it = _listClients.find(clientSocket);
 		Client *client = it->second ; // need to get the adress of the client object whose socket = clientSocket
 		std::string	msg = this->handleRequest(*client, buff);
-		if (msg != "")
-			send(clientSocket, msg.c_str(), msg.length(), 0);
+		// if (msg != "")
+		// 	send(clientSocket, msg.c_str(), msg.length(), 0);
 	}
 }
 
