@@ -6,12 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 15:26:40 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/31 15:22:58 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/01/31 17:14:02 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_irc.hpp"
-#include "../define.hpp"
+#include "ft_irc.hpp"
 
 static bool	checkCharacters(std::string nickname) {
 	std::string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";

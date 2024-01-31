@@ -6,7 +6,7 @@
 #    By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 11:26:17 by axcallet          #+#    #+#              #
-#    Updated: 2024/01/30 13:33:19 by ajoliet          ###   ########.fr        #
+#    Updated: 2024/01/31 17:14:04 by axcallet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@
 NAME		= ircserv
 CC			= c++
 CFLAGS		= -Wall -Werror -Wextra -std=c++98 -g3
+INC			= -I inc/
 
 ########## SOURCES ##########
 
@@ -30,11 +31,11 @@ all: title $(NAME)
 
 $(NAME): $(OBJ)
 	@echo $(_GREEN)- Compiling $(OBJ) $(END)
-	@$(CC) $(CFLAGS) $(OBJ) -o $@
+	@$(CC) $(CFLAGS) $(INC) $(OBJ) -o $@
 
 %.o: %.cpp
 	@echo $(_CYAN)- Compiling $<$(END)
-	@$(CC) -o $@ -c $< $(CFLAGS)
+	@$(CC) $(INC)-o $@ -c $< $(CFLAGS)
 
 clean:
 	@echo $(_YELLOW)- Cleaning $(OBJ)$(END)

@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:10:15 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/30 17:36:17 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:29:21 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
+#include "Server.hpp"
 
 // Constructor/Destructor
 Server::Server(int port, std::string password) {
@@ -178,13 +178,13 @@ std::vector<std::string>	Server::splitRequest(std::string request)
 }
 //labite
 /**
- * Parse the request of a client and execute it if possible.
+ * Parse the request of a client, execute it if possible
+ * then display the answer of the server.
  * 
  * @param client the client who sent the request.
  * @param request the data sent by the client.
- * @return the message to send back to the client.
 */
-std::string	Server::handleRequest(Client &client, std::string request)
+void	Server::handleRequest(Client &client, std::string request)
 {
 	std::vector<std::string> cmd = this->splitRequest(request);
 	unsigned int vecSize = cmd.size();
@@ -212,14 +212,14 @@ std::string	Server::handleRequest(Client &client, std::string request)
 		case 0:
 			return (this->pass(client, cmd));
 		case 1:
-			this->nick(client, cmd);
+			return (this->nick(client, cmd));
 		case 2:
 			return (this->user(client, cmd));
 	}
 	return ("amené gros\n");
 }
 
-bool	Server::searchNickname(std::string nickname) {
+bool	Server::searchNameClient(std::string nickname) {
 	for (std::map<int, Client *>::iterator it = this->_listClients.begin(); it != this->_listClients.end(); it++) {
 		if (it->second->getNickname() == nickname)
 			return (true);
@@ -227,12 +227,34 @@ bool	Server::searchNickname(std::string nickname) {
 	return (false);
 }
 
+bool	Server::searchNameChannel(std::string name) {
+	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end(); it++) {
+		if (it->first == name)
+			return (true);
+	}
+	return (false);
+}
+
 std::string Server::help(void) {
-	return ("Here is the list of all available commands :\nPASS : use it when you need to log and enter the password\nNICK : set a new NickName\nUSER : set a new UserName\nKICK : eject a client from the channel\nINVITE : invite a client to a channel\nTOPIC : change or view the channel topic\nMODE : change the channel's mode\n	i: set/remove invite only channel\n	t: set/remove the restrictions of the TOPIC command to channel operators\n	k: set/remove the channel key (password)\n	o: give/take channel operator privilege\n	l: set/remove the user limit to channel\nPRIVMSG : send a private message\nJOIN : joins a channel\n");
+	return ("Here is the list of all available commands :\n \
+			PASS : use it when you need to log and enter the password\n \
+			NICK : set a new NickName\n \
+			USER : set a new UserName\n \
+			KICK : eject a client from the channel\n \
+			INVITE : invite a client to a channel\n \
+			TOPIC : change or view the channel topic\n \
+			PRIVMSG : send a private message\n \
+			JOIN : joins a channel\n \
+			MODE : change the channel's mode\n 	\
+			i: set/remove invite only channel\n 	\
+			t: set/remove the restrictions of the TOPIC command to channel operators\n 	\
+			k: set/remove the channel key (password)\n 	\
+			o: give/take channel operator privilege\n 	\
+			l: set/remove the user limit to channel\n");
 }
 
 void	Server::dispLogs(std::string str, int clientFD) {
-	std::string tmp = "[IRC] Error: ";
+	std::string tmp = "[IRC] ";
 	tmp += str;
-	send(clientFD, tmp, sizeof(tmp), 0);
+	send(clientFD, tmp.c_str(), sizeof(tmp), 0);
 }
