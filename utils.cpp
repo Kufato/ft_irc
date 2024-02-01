@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/01 11:52:56 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/01 15:59:06 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ bool	Server::searchNameClient(std::string nickname) {
 Channel	Server::searchNameChannel(std::string name) {
 	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end(); it++) {
 		if (it->first == name)
-			return (it->second);
+			return (*it->second);
 	}
 	return (NULL);
 }
@@ -32,4 +32,12 @@ void	Server::dispLogs(std::string str, int clientFD) {
 	std::string tmp = "[IRC] ";
 	tmp += str;
 	send(clientFD, tmp.c_str(), sizeof(tmp), 0);
+}
+
+bool	checkCharacters(std::string s) {
+	std::string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+
+	if (s.find_first_not_of(allowedChars) != std::string::npos)
+		return (false);
+	return (true);
 }

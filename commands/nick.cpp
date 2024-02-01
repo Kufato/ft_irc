@@ -6,19 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 15:26:40 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/31 17:13:30 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/01 15:45:08 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
-
-static bool	checkCharacters(std::string nickname) {
-	std::string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
-
-	if (nickname.find_first_not_of(allowedChars) != std::string::npos)
-		return (false);
-	return (true);
-}
 
 void Server::nick(Client &client, std::vector<std::string> cmd) {
 	if (cmd.size() != 2 || cmd[1].empty())

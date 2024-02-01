@@ -13,7 +13,7 @@ void Server::join(Client &client, std::vector<std::string> cmd) {
     }
     else { // (le channel existe)
         if (cmd.size() == 2 && isInviteOnly())
-            return (dispLogs("il faut un mdp pour les inviteonlychannel"), client.getSocket)
+            return (dispLogs("il faut un mdp pour les inviteonlychannel"), client.getSocket())
         if (cmd.size() == 3 && !isInviteOnly())
 //       return (dispLogs("arg en trop pour private channel"), client.getSocket)
 //    if (cmd.size() == 3 && isInviteOnly)

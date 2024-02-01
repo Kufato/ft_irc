@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/01 11:33:08 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/01 16:15:08 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,16 @@
 
 //MSG MODE
 #define ERR_NOOPERATOR			"Error: your are oerator in this channel"
-
+#define ERR_UNKNOWNMODE			"Error: mode doesn't exist."
+#define ERR_NOTONCHANNEL		"Error: client is not in this channel"
+#define ERR_CHANOPRIVSNEEDED	"Error: channel operator privileges requiered"
+#define ERR_NOTINRANGE			"Error: number given is too high/low"
+#define RPL_CHANNELMODEIS		": mode changed successfully"
 
 //MSG OTHER
 #define ERR_NEEDMOREPARAMS		"Error: not enough parameters"
 #define ERR_TOOMANYPARAMS		"Error: too many parameters"
+#define ERR_INVALIDCHAR			"Error: character(s) used is invalid"
+
+
+bool	checkCharacters(std::string s);

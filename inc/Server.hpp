@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:01:33 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/01 11:30:37 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/01 14:01:15 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ class	Server {
 		void		privmsg(Client &client, std::vector<std::string> cmd);
 		
 	// Utils
-		bool	searchNameChannel(std::string name);
-		boo	searchNameClient(std::string nickname);
+		Channel	searchNameChannel(std::string name);
+		bool	searchNameClient(std::string nickname);
 		void	dispLogs(std::string str, int clientFD);
 		
 	// Channels

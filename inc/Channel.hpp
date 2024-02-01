@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:03:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/31 18:26:02 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/01 15:22:04 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ class	Server;
 
 class Channel
 {
-	private:
+	private: 
 		std::string								_name;
 		std::string								_topic;
 		std::string								_password;
@@ -32,7 +32,7 @@ class Channel
 		~Channel();
 		void						addClient(Client *client);
 		void						opClient(Client *client, bool mode);
-		std::pair<Client *, bool>	findMember(Client *client);
+		std::vector<std::pair<Client *, bool> >::iterator	findMember(Client client);
 
 		// Getters
 		std::string								getName();
