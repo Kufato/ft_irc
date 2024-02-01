@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/31 17:39:31 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/01 11:33:08 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,10 @@
 #define ERR_NOUSERFOUND			"Error: the user doesn't exist"
 #define ERR_NOTEXTTOSEND 		"Error: your message cannot be empty"
 #define ERR_NOCHANNELFOUND 		"Error: the channel doesn't exist"
+
+//MSG MODE
+#define ERR_NOOPERATOR			"Error: your are oerator in this channel"
+
 
 //MSG OTHER
 #define ERR_NEEDMOREPARAMS		"Error: not enough parameters"

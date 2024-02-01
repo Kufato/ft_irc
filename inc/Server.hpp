@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:01:33 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/31 17:45:49 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/01 11:30:37 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,16 @@ class	Server {
 		void		user(Client &client, std::vector<std::string> cmd);
 		void		pass(Client &client, std::vector<std::string> cmd);
 		void		join(Client &client, std::vector<std::string> cmd);
+		void		mode(Client &client, std::vector<std::string> cmd);
 		void		privmsg(Client &client, std::vector<std::string> cmd);
 		
 	// Utils
 		bool	searchNameChannel(std::string name);
-		bool	searchNameClient(std::string nickname);
+		boo	searchNameClient(std::string nickname);
 		void	dispLogs(std::string str, int clientFD);
+		
+	// Channels
+//		bool	createChannel(Client &client, std::string channelName)
 
 	// Getters
 		int	getPort(void) {

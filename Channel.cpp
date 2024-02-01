@@ -16,10 +16,18 @@ void	Channel::addClient(Client *client)
 
 void	Channel::opClient(Client *client, bool mode)
 {
-
+	std::pair<Client *, bool>
 }
 
-std::pair<Client *, bool>	findMember(Client *client);
+std::pair<Client *, bool>	*Channel::findMember(Client *client)
+{
+	for (std::vector<std::pair<Client *, bool> >::iterator it = _members.begin(); it != _members.end(); it++)
+	{
+		if (it->first->getNickname() == client->getNickname())
+			return (it->);
+	}
+	return (NULL);
+}
 
 // Getters
 std::string	Channel::getName()
