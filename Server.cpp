@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:10:15 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/01 11:02:29 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/02 14:23:17 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,13 +157,10 @@ std::vector<std::string>	Server::splitRequest(std::string request)
 	std::vector<std::string>	res;
 	size_t pos = 0;
 	size_t posend = 0;
-	while (pos != std::string::npos)
-	{
+	while (pos != std::string::npos) {
 		pos = request.find_first_not_of(" \n", posend);
-		if (pos != std::string::npos)
-		{
-			if (request[pos] == ':')
-			{
+		if (pos != std::string::npos) {
+			if (request[pos] == ':') {
 				if (request[pos + 1])
 					res.push_back(request.substr(pos, request.length() - pos));
 				break;
@@ -189,25 +186,21 @@ void	Server::handleRequest(Client &client, std::string request)
 	std::vector<std::string> cmd = this->splitRequest(request);
 	unsigned int vecSize = cmd.size();
 	std::cout << "Splitted request (" << vecSize << ") : ";
-	for(unsigned int i = 0; i < vecSize; i++)
-	{
+	for(unsigned int i = 0; i < vecSize; i++) {
 		std::cout << "\"" << cmd[i] << "\"" << " ";
 	}
 	std::cout << std::endl;
 	std::string commands[10] = {"PASS", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP"};
 	int i;
 	for (i = 0; i < 7; i++) {
-		if (cmd[0] == commands[i])
-		{
+		if (cmd[0] == commands[i]) {
 			std::cout << "Found command " << commands[i] << std::endl;
 			break;
 		}
 	}
 	if (i && !client.isRegistered())
 	if (i > 2 && !client.isLogged())
-	{
 		return ();
-	}
 	switch (i) {
 		case 0:
 			return (this->pass(client, cmd));

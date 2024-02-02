@@ -6,13 +6,13 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:03:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/01 15:22:04 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/02 13:42:39 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "ft_irc.hpp"
+#include "Channel.hpp"
 
 class	Client;
 class	Server;

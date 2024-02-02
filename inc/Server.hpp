@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:01:33 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/01 14:01:15 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/02 11:22:12 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ class	Server {
 		void		pass(Client &client, std::vector<std::string> cmd);
 		void		join(Client &client, std::vector<std::string> cmd);
 		void		mode(Client &client, std::vector<std::string> cmd);
+		void		kick(Client &client, std::vector<std::string> cmd);
+		void		mode_i(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
+		void		mode_t(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
+		void		mode_k(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
+		void		mode_o(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
+		void		mode_l(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 		void		privmsg(Client &client, std::vector<std::string> cmd);
 		
 	// Utils
