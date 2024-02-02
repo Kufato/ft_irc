@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/01 15:59:06 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/02 15:27:04 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,14 @@ Channel	Server::searchNameChannel(std::string name) {
 		if (it->first == name)
 			return (*it->second);
 	}
-	return (NULL);
+	return ((Channel)NULL);
 }
 
-void	Server::dispLogs(std::string str, int clientFD) {
+void	Server::dispLogs(std::string str, int clientFD, void *param) {
 	std::string tmp = "[IRC] ";
 	tmp += str;
+	if (param)
+		tmp += (char *)param;
 	send(clientFD, tmp.c_str(), sizeof(tmp), 0);
 }
 

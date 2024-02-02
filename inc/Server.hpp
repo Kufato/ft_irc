@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:01:33 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/02 11:22:12 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/02 15:29:41 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,24 +44,26 @@ class	Server {
 		void	handleRequest(Client &client, std::string request);
 	
 	// Commands
-		std::string	help(void);
+		void		help(Client &client);
 		void		nick(Client &client, std::vector<std::string> cmd);
 		void		user(Client &client, std::vector<std::string> cmd);
 		void		pass(Client &client, std::vector<std::string> cmd);
 		void		join(Client &client, std::vector<std::string> cmd);
 		void		mode(Client &client, std::vector<std::string> cmd);
 		void		kick(Client &client, std::vector<std::string> cmd);
+		void		topic(Client &client, std::vector<std::string> cmd);
+		void		invite(Client &client, std::vector<std::string> cmd);
+		void		privmsg(Client &client, std::vector<std::string> cmd);
 		void		mode_i(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 		void		mode_t(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 		void		mode_k(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 		void		mode_o(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 		void		mode_l(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
-		void		privmsg(Client &client, std::vector<std::string> cmd);
 		
 	// Utils
 		Channel	searchNameChannel(std::string name);
 		bool	searchNameClient(std::string nickname);
-		void	dispLogs(std::string str, int clientFD);
+		void	dispLogs(std::string str, int clientFD, void *param);
 		
 	// Channels
 //		bool	createChannel(Client &client, std::string channelName)

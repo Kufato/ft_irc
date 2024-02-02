@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/01 16:15:08 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/02 15:23:38 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,32 @@
 #define ERR_CHANOPRIVSNEEDED	"Error: channel operator privileges requiered"
 #define ERR_NOTINRANGE			"Error: number given is too high/low"
 #define RPL_CHANNELMODEIS		": mode changed successfully"
+
+//MSG KICK
+#define RPL_KICK				": your are kick from a channel"
+#define ERR_AUTOKICK			"Error: you can't autokick"
+#define ERR_NOTONCHANNEL		"Error: this client is not on this channel"
+
+//MSG INVITE
+#define RPL_INVITE				": you have receive a invitation for the channel"
+#define RPL_SENDINVITATION		": you have send a invitation to"
+
+//MSG HELP
+#define RPL_HELP				"Here is the list of all available commands :\n \
+								PASS : use it when you need to log and enter the password\n \
+								NICK : set a new NickName\n \
+								USER : set a new UserName\n \
+								KICK : eject a client from the channel\n \
+								INVITE : invite a client to a channel\n \
+								TOPIC : change or view the channel topic\n \
+								PRIVMSG : send a private message\n \
+								JOIN : joins a channel\n \
+								MODE : change the channel's mode\n 	\
+								i: set/remove invite only channel\n 	\
+								t: set/remove the restrictions of the TOPIC command to channel operators\n 	\
+								k: set/remove the channel key (password)\n 	\
+								o: give/take channel operator privilege\n 	\
+								l: set/remove the user limit to channel\n"
 
 //MSG OTHER
 #define ERR_NEEDMOREPARAMS		"Error: not enough parameters"

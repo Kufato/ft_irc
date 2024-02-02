@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:10:15 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/02 14:23:17 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/02 15:29:54 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,23 +124,27 @@ void	Server::handleNewClient(void) {
 void	Server::handleClient(int clientSocket) {
 	int			bytesRead;
 	char		buff[2048];
-	std::string	strBuff;
+	static std::string	strBuff = "";
+	std::string	request;
 	
 	memset(&buff, 0, sizeof(buff));
 	bytesRead = recv(clientSocket, buff, sizeof(buff), 0);
-	strBuff = buff;
-	if (strBuff.find("/n")) {
+	strBuff += buff;
+	size_t end = strBuff.find("/n");
+	if (end != std::string::npos) {
 		if (bytesRead <= 0) {
 			if (!bytesRead)
 				std::cout << "Connection with client closed." << std::endl;
 			else
 				std::cerr << "Error receiving data from client." << std::endl;
 		}
-		std::cout << "Received : " << buff << std::endl;
+		request = strBuff.substr(0, end);
+		strBuff = strBuff.substr(end, strBuff.length() - request.length());
+		std::cout << "Received : " << request << std::endl;
 		std::map<int, Client*>::iterator it = _listClients.find(clientSocket);
 		Client *client = it->second ; // need to get the adress of the client object whose socket = clientSocket
 		client->setSocket(clientSocket);
-		// std::string	msg = this->handleRequest(*client, buff);
+		this->handleRequest(*client, request);
 		// if (msg != "")
 		// 	send(clientSocket, msg.c_str(), msg.length(), 0);
 	}
@@ -199,8 +203,9 @@ void	Server::handleRequest(Client &client, std::string request)
 		}
 	}
 	if (i && !client.isRegistered())
+		return (dispLogs(": register by using the commad PASS <password>", client.getSocket()));
 	if (i > 2 && !client.isLogged())
-		return ();
+		return (dispLogs(": log in by using NICK <nicname> and USER <username>", client.getSocket()));
 	switch (i) {
 		case 0:
 			return (this->pass(client, cmd));
@@ -209,15 +214,19 @@ void	Server::handleRequest(Client &client, std::string request)
 		case 2:
 			return (this->user(client, cmd));
 		case 3:
-			return (this->kick());
+			return (this->kick(client, cmd));
 		case 4:
-			return (this->invite());
+			return (this->invite(client, cmd));
 		case 5:
 			return (this->topic());
 		case 6:
-			return (this->mode());
+			return (this->mode(client, cmd));
 		case 7;
 			return (this->privmsg(client, cmd));
+		case 8:
+			return (this->join(client, cmd));
+		case 9:
+			return (this->help(client));
 	}
 	return ();
 }
