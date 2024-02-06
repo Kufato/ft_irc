@@ -1,4 +1,4 @@
-#include "Channel.hpp"
+#include "inc/Channel.hpp"
 
 Channel::Channel(std::string name) : _name(name), _topic(NULL), _password(NULL), _clientLimit(0), _inviteOnly(false), _restrictTopic(false)
 {

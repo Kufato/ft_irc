@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:01:33 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/02 15:29:41 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/06 15:44:43 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,9 @@ class	Server {
 		void		mode_l(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 		
 	// Utils
-		Channel	searchNameChannel(std::string name);
-		bool	searchNameClient(std::string nickname);
+		Channel	*searchNameChannel(std::string name);
+		Client	*searchNameClient(std::string nickname);
+		bool	clientExist(std::string nickname);
 		void	dispLogs(std::string str, int clientFD, void *param);
 		
 	// Channels

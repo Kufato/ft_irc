@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/02 15:23:38 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/06 15:01:45 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@
 //MSG KICK
 #define RPL_KICK				": your are kick from a channel"
 #define ERR_AUTOKICK			"Error: you can't autokick"
-#define ERR_NOTONCHANNEL		"Error: this client is not on this channel"
 
 //MSG INVITE
 #define RPL_INVITE				": you have receive a invitation for the channel"
@@ -86,6 +85,7 @@
 #define ERR_NEEDMOREPARAMS		"Error: not enough parameters"
 #define ERR_TOOMANYPARAMS		"Error: too many parameters"
 #define ERR_INVALIDCHAR			"Error: character(s) used is invalid"
+#define ERR_UNKNOWNCOMMAND		"Error: command unknown"
 
 
 bool	checkCharacters(std::string s);

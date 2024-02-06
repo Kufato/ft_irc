@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 15:26:40 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/02 15:43:55 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/06 15:45:09 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
+#include "../inc/ft_irc.hpp"
 
 void Server::user(Client &client, std::vector<std::string> cmd) {
 	// if (client.isRegistered() == true)
@@ -19,9 +19,9 @@ void Server::user(Client &client, std::vector<std::string> cmd) {
 		return (dispLogs(ERR_NEEDMOREPARAMS, client.getSocket(), NULL));
 	if (cmd.size() > 2)
 		return (dispLogs(ERR_TOOMANYPARAMS, client.getSocket(), NULL));
-	if (checkCharacters(cmd[1]))
+	if (!checkCharacters(cmd[1]))
 		return (dispLogs(ERR_ERRONEUSNICKNAME, client.getSocket(), NULL));
-	if (searchNameClient(cmd[1]))
+	if (clientExist(cmd[1]))
 		return (dispLogs(ERR_NICKNAMEINUSE, client.getSocket(), NULL));
 	if (!client.getNickname().empty() && client.getUsername().empty()) {
 		client.setRegistered(true);

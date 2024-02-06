@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 16:49:34 by axcallet          #+#    #+#             */
-/*   Updated: 2024/01/31 17:06:10 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/06 15:15:21 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Client.hpp"
+#include "inc/Client.hpp"
 
-Client::Client(int socket) : _socket(socket), _username(NULL), _nickname(NULL) {
+Client::Client(int socket) : _socket(socket), _username(""), _nickname("") {
 	this->_logged = false;
 	this->_registered = false;
 }

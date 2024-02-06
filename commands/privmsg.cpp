@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:44:11 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/02 15:49:40 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/06 15:49:53 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
+#include "../inc/ft_irc.hpp"
 
 void Server::privmsg(Client &client, std::vector<std::string> cmd) {
 	if (cmd.size() < 3 )
 		return (dispLogs(ERR_NEEDMOREPARAMS, client.getSocket(), NULL));
 	if (cmd[cmd.size() - 1].empty())
 		return (dispLogs(ERR_NOTEXTTOSEND, client.getSocket(), NULL));
-	for (int i = 1; i < cmd.size(); i++) {
+	for (size_t i = 1; i < cmd.size() - 1; i++) {
 		if (cmd[i][0] == '#') {
 			if (!searchNameChannel(cmd[i]))
 				return (dispLogs(ERR_NOCHANNELFOUND, client.getSocket(), NULL));
@@ -29,9 +29,11 @@ void Server::privmsg(Client &client, std::vector<std::string> cmd) {
 			}
 		}
 		else {
-			if (!searchNameClient(cmd[i]))
+			Client *receiver = searchNameClient(cmd[i]);
+			if (!receiver)
 				return (dispLogs(ERR_NOUSERFOUND, client.getSocket(), NULL));
-			send(client.getSocket(), cmd[cmd.size() - 1].c_str(), cmd[cmd.size() - 1].length(), 0);
+			std::string	msg = client.getNickname() + " sent to you: " + cmd[cmd.size() - 1] + '\n'; 
+			send(receiver->getSocket(), msg.c_str(), msg.length(), 0);
 		}
 	}
 }

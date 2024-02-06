@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:10:15 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/02 15:29:54 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/06 16:29:38 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "inc/Server.hpp"
 
 // Constructor/Destructor
 Server::Server(int port, std::string password) {
@@ -74,7 +74,6 @@ void	Server::lauchServer(void) {
 
 	while (true) {
 		event_count = epoll_wait(this->_epollFd, events , 1024, -1);
-		std::cout << event_count << std::endl;
 		for (int i = 0; i < event_count; i++) {
 			if (events[i].data.fd == this->_serverSocket)
 				handleNewClient();
@@ -130,17 +129,19 @@ void	Server::handleClient(int clientSocket) {
 	memset(&buff, 0, sizeof(buff));
 	bytesRead = recv(clientSocket, buff, sizeof(buff), 0);
 	strBuff += buff;
-	size_t end = strBuff.find("/n");
+	size_t end = strBuff.find("\n");
 	if (end != std::string::npos) {
 		if (bytesRead <= 0) {
 			if (!bytesRead)
 				std::cout << "Connection with client closed." << std::endl;
+				//kill the client using epoll ctl and close (don't forget to remove the client from all its channels)
 			else
 				std::cerr << "Error receiving data from client." << std::endl;
 		}
 		request = strBuff.substr(0, end);
-		strBuff = strBuff.substr(end, strBuff.length() - request.length());
+		strBuff = strBuff.substr(end + 1, strBuff.length() - request.length());
 		std::cout << "Received : " << request << std::endl;
+		std::cout << "Rest : " << strBuff << std::endl;
 		std::map<int, Client*>::iterator it = _listClients.find(clientSocket);
 		Client *client = it->second ; // need to get the adress of the client object whose socket = clientSocket
 		client->setSocket(clientSocket);
@@ -150,33 +151,6 @@ void	Server::handleClient(int clientSocket) {
 	}
 }
 
-/**
- * Split the request into a vector of strings, separated by spaces.
- * 
- * @param request the data sent by the client.
- * @return vector containing all the arguments present in the request.
-*/
-std::vector<std::string>	Server::splitRequest(std::string request)
-{
-	std::vector<std::string>	res;
-	size_t pos = 0;
-	size_t posend = 0;
-	while (pos != std::string::npos) {
-		pos = request.find_first_not_of(" \n", posend);
-		if (pos != std::string::npos) {
-			if (request[pos] == ':') {
-				if (request[pos + 1])
-					res.push_back(request.substr(pos, request.length() - pos));
-				break;
-			}
-			posend = request.find_first_of(" \n", pos);
-			if (posend == std::string::npos)
-				posend = request.length();
-			res.push_back(request.substr(pos, posend - pos));
-		}
-	}
-	return (res);
-}
 //labite
 /**
  * Parse the request of a client, execute it if possible
@@ -189,9 +163,12 @@ void	Server::handleRequest(Client &client, std::string request)
 {
 	std::vector<std::string> cmd = this->splitRequest(request);
 	unsigned int vecSize = cmd.size();
+	if (!vecSize)
+		return ;
 	std::cout << "Splitted request (" << vecSize << ") : ";
 	for(unsigned int i = 0; i < vecSize; i++) {
-		std::cout << "\"" << cmd[i] << "\"" << " ";
+		if (!cmd[i].empty())
+			std::cout << "\"" << cmd[i] << "\"" << " ";
 	}
 	std::cout << std::endl;
 	std::string commands[10] = {"PASS", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP"};
@@ -202,10 +179,10 @@ void	Server::handleRequest(Client &client, std::string request)
 			break;
 		}
 	}
-	if (i && !client.isRegistered())
-		return (dispLogs(": register by using the commad PASS <password>", client.getSocket()));
-	if (i > 2 && !client.isLogged())
-		return (dispLogs(": log in by using NICK <nicname> and USER <username>", client.getSocket()));
+	if (i && !client.isLogged())
+		return (dispLogs(": register by using the commad PASS <password>", client.getSocket(), NULL));
+	if (i > 2 && !client.isRegistered())
+		return (dispLogs(": log in by using NICK <nicname> and USER <username>", client.getSocket(), NULL));
 	switch (i) {
 		case 0:
 			return (this->pass(client, cmd));
@@ -218,15 +195,15 @@ void	Server::handleRequest(Client &client, std::string request)
 		case 4:
 			return (this->invite(client, cmd));
 		case 5:
-			return (this->topic());
+			return (this->topic(client, cmd));
 		case 6:
 			return (this->mode(client, cmd));
-		case 7;
+		case 7:
 			return (this->privmsg(client, cmd));
 		case 8:
 			return (this->join(client, cmd));
 		case 9:
 			return (this->help(client));
 	}
-	return ();
+	return (dispLogs(ERR_UNKNOWNCOMMAND, client.getSocket(), (void *)cmd[0].c_str()));
 }

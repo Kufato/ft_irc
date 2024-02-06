@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/02 15:27:04 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/06 16:29:18 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
+#include "inc/ft_irc.hpp"
 
-bool	Server::searchNameClient(std::string nickname) {
+bool	Server::clientExist(std::string nickname) {
 	for (std::map<int, Client *>::iterator it = this->_listClients.begin(); it != this->_listClients.end(); it++) {
 		if (it->second->getNickname() == nickname)
 			return (true);
@@ -20,20 +20,29 @@ bool	Server::searchNameClient(std::string nickname) {
 	return (false);
 }
 
-Channel	Server::searchNameChannel(std::string name) {
+Client	*Server::searchNameClient(std::string nickname) {
+	for (std::map<int, Client *>::iterator it = this->_listClients.begin(); it != this->_listClients.end(); it++) {
+		if (it->second->getNickname() == nickname)
+			return (it->second);
+	}
+	return (NULL);
+}
+
+Channel	*Server::searchNameChannel(std::string name) {
 	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end(); it++) {
 		if (it->first == name)
-			return (*it->second);
+			return (it->second);
 	}
-	return ((Channel)NULL);
+	return (NULL);
 }
 
 void	Server::dispLogs(std::string str, int clientFD, void *param) {
 	std::string tmp = "[IRC] ";
-	tmp += str;
 	if (param)
 		tmp += (char *)param;
-	send(clientFD, tmp.c_str(), sizeof(tmp), 0);
+	tmp += str;
+	tmp += '\n';
+	send(clientFD, tmp.c_str(), tmp.length(), 0);
 }
 
 bool	checkCharacters(std::string s) {
@@ -42,4 +51,32 @@ bool	checkCharacters(std::string s) {
 	if (s.find_first_not_of(allowedChars) != std::string::npos)
 		return (false);
 	return (true);
+}
+
+/**
+ * Split the request into a vector of strings, separated by spaces.
+ * 
+ * @param request the data sent by the client.
+ * @return vector containing all the arguments present in the request.
+*/
+std::vector<std::string>	Server::splitRequest(std::string request)
+{
+	std::vector<std::string>	res;
+	size_t pos = 0;
+	size_t posend = 0;
+	while (pos != std::string::npos) {
+		pos = request.find_first_not_of(" \n", posend);
+		if (pos != std::string::npos) {
+			if (request[pos] == ':') {
+				if (request[pos + 1])
+					res.push_back(request.substr(pos, request.length() - pos));
+				break;
+			}
+			posend = request.find_first_of(" \n", pos);
+			if (posend == std::string::npos)
+				posend = request.length();
+			res.push_back(request.substr(pos, posend - pos));
+		}
+	}
+	return (res);
 }
