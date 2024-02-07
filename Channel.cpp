@@ -33,6 +33,14 @@ std::vector<std::pair<Client *, bool> >::iterator	Channel::findMember(Client cli
 }
 
 // Getters
+int			Channel::getClients() { return _clients; }
+
+int			Channel::getClientLimit() { return _clientLimit; }
+
+bool		Channel::isInviteOnly() { return _inviteOnly; }
+
+bool		Channel::isTopicRestricted() { return _restrictTopic; }
+
 std::string	Channel::getName() { return _name; }
 
 std::string	Channel::getTopic() { return _topic; }
@@ -40,12 +48,6 @@ std::string	Channel::getTopic() { return _topic; }
 std::string	Channel::getPassword() { return _password; }
 
 std::vector<std::pair<Client *, bool> >	Channel::getMembers() { return _members; }
-
-int			Channel::getClientLimit() { return _clientLimit; }
-
-bool		Channel::isInviteOnly() { return _inviteOnly; }
-
-bool		Channel::isTopicRestricted() { return _restrictTopic; }
 
 // Setters
 void	Channel::setName(std::string name) { _name = name; }

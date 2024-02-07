@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:10:15 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/06 16:29:38 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/07 10:32:36 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,6 @@ void	Server::handleClient(int clientSocket) {
 	}
 }
 
-//labite
 /**
  * Parse the request of a client, execute it if possible
  * then display the answer of the server.

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/06 15:01:45 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/07 14:34:52 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/epoll.h>
-
-#include <stdio.h>
 
 #include "Client.hpp"
 #include "Server.hpp"
@@ -63,6 +61,13 @@
 //MSG INVITE
 #define RPL_INVITE				": you have receive a invitation for the channel"
 #define RPL_SENDINVITATION		": you have send a invitation to"
+
+//MSG JOIN
+#define ERR_PASSCREATECHANNEL	": you don't need password to create a channel"
+#define ERR_NOINVITATION		": you don't have an invitation for this channel"
+#define ERR_NOPASS				": you have to provide a password to enter in this channel"
+#define ERR_BADPASS				": you provide the wrong password"
+#define ERR_CHANNELFULL			": the channel is full"
 
 //MSG HELP
 #define RPL_HELP				"Here is the list of all available commands :\n \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:03:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/06 15:03:07 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/07 14:53:48 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,17 @@
 class	Client;
 class	Server;
 
-class Channel
-{
+class	Channel {
+
 	private: 
+		int										_clientLimit;
+		bool									_inviteOnly;
+		bool									_restrictTopic;
 		std::string								_name;
 		std::string								_topic;
 		std::string								_password;
 		std::vector<std::pair<Client *, bool> > _members;
-		int										_clientLimit;
-		bool									_inviteOnly;
-		bool									_restrictTopic;
+
 	public:
 		Channel(std::string name);
 		~Channel();
@@ -35,13 +36,13 @@ class Channel
 		std::vector<std::pair<Client *, bool> >::iterator	findMember(Client client);
 
 		// Getters
+		int										getClientLimit();
+		bool									isInviteOnly();
+		bool									isTopicRestricted();
 		std::string								getName();
 		std::string								getTopic();
 		std::string								getPassword();
 		std::vector<std::pair<Client *, bool> >	getMembers();
-		int										getClientLimit();
-		bool									isInviteOnly();
-		bool									isTopicRestricted();
 
 		// Setters
 		void	setName(std::string name);
