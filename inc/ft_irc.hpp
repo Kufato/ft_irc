@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/07 14:34:52 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/08 13:54:24 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <vector>
 #include <fcntl.h>
 #include <cstdlib>
+#include <cstdio>
 #include <cstring>
 #include <iostream>
 #include <unistd.h>
@@ -59,6 +60,7 @@
 #define ERR_AUTOKICK			"Error: you can't autokick"
 
 //MSG INVITE
+#define ERR_ALREADYINVITED		": this client has already received an invitation"
 #define RPL_INVITE				": you have receive a invitation for the channel"
 #define RPL_SENDINVITATION		": you have send a invitation to"
 
@@ -68,6 +70,9 @@
 #define ERR_NOPASS				": you have to provide a password to enter in this channel"
 #define ERR_BADPASS				": you provide the wrong password"
 #define ERR_CHANNELFULL			": the channel is full"
+#define ERR_ALREADYIN			": you already joined this channel"
+#define RPL_CHANNELCREATED		": the channel was successfully created"
+#define	RPL_CHANNELJOINED		": the channel was successfully joined"
 
 //MSG HELP
 #define RPL_HELP				"Here is the list of all available commands :\n \
@@ -91,6 +96,7 @@
 #define ERR_TOOMANYPARAMS		"Error: too many parameters"
 #define ERR_INVALIDCHAR			"Error: character(s) used is invalid"
 #define ERR_UNKNOWNCOMMAND		"Error: command unknown"
+#define	ERR_BADCHARCHANNEL		"Error: channel's name must start with '#'"
 
 
 bool	checkCharacters(std::string s);

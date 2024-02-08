@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:10:15 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/07 10:32:36 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:31:00 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ Server::~Server(void) {
 */
 void	Server::createServer() {
 	if (bind(this->_serverSocket, (struct sockaddr*)&this->_serverAddr, sizeof(this->_serverAddr))) {
-		perror("Bind");
+		std::perror("Bind");
 		close (this->_serverSocket);
 		throw std::logic_error("Couldn't bind socket.");
 	}
@@ -172,7 +172,7 @@ void	Server::handleRequest(Client &client, std::string request)
 	std::cout << std::endl;
 	std::string commands[10] = {"PASS", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP"};
 	int i;
-	for (i = 0; i < 7; i++) {
+	for (i = 0; i < 10; i++) {
 		if (cmd[0] == commands[i]) {
 			std::cout << "Found command " << commands[i] << std::endl;
 			break;

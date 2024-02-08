@@ -1,6 +1,6 @@
 #include "inc/Channel.hpp"
 
-Channel::Channel(std::string name) : _name(name), _topic(NULL), _password(NULL), _clientLimit(0), _inviteOnly(false), _restrictTopic(false)
+Channel::Channel(std::string name) : _clientLimit(10), _inviteOnly(false), _restrictTopic(false), _name(name), _topic(""), _password("")
 {
 }
 
@@ -27,14 +27,15 @@ std::vector<std::pair<Client *, bool> >::iterator	Channel::findMember(Client cli
 	for (it = _members.begin(); it != _members.end(); it++)
 	{
 		if (it->first->getNickname() == client.getNickname())
+		{
+			std::cout << it->first->getNickname() << std::endl;
 			return (it);
+		}
 	}
 	return (it);
 }
 
 // Getters
-int			Channel::getClients() { return _clients; }
-
 int			Channel::getClientLimit() { return _clientLimit; }
 
 bool		Channel::isInviteOnly() { return _inviteOnly; }

@@ -6,7 +6,7 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/06 16:29:18 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/07 15:58:38 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ Client	*Server::searchNameClient(std::string nickname) {
 }
 
 Channel	*Server::searchNameChannel(std::string name) {
+	if (_listChannels.empty())
+		return NULL;
 	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end(); it++) {
 		if (it->first == name)
 			return (it->second);
@@ -69,7 +71,7 @@ std::vector<std::string>	Server::splitRequest(std::string request)
 		if (pos != std::string::npos) {
 			if (request[pos] == ':') {
 				if (request[pos + 1])
-					res.push_back(request.substr(pos, request.length() - pos));
+					res.push_back(request.substr(pos + 1, request.length() - pos));
 				break;
 			}
 			posend = request.find_first_of(" \n", pos);
