@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:01:33 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/08 14:06:39 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/09 17:17:23 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,19 @@ class	Server {
 		void		mode_k(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 		void		mode_o(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 		void		mode_l(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
-		
+	
+	// Signals
+		void	newSignal(int signum);
+
+		void	newSigint(int signum);
+		void	registerSignalHandler(void);
+		void	handleSignalWrapper(int signum) const;
+
 	// Utils
-		Channel	*searchNameChannel(std::string name);
-		Client	*searchNameClient(std::string nickname);
 		bool	clientExist(std::string nickname);
 		void	dispLogs(std::string str, int clientFD, void *param);
+		Client	*searchNameClient(std::string nickname);
+		Channel	*searchNameChannel(std::string name);
 		
 	// Channels
 //		bool	createChannel(Client &client, std::string channelName)

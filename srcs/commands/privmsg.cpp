@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:44:11 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/08 14:50:49 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/09 15:41:14 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ void Server::privmsg(Client &client, std::vector<std::string> cmd) {
 			Channel channelTmp = *this->_listChannels.find(cmd[i])->second;
 			std::vector<std::pair<Client *, bool> > clientsTmp = channelTmp.getMembers();
 			for (std::vector<std::pair<Client *, bool> >::iterator it = clientsTmp.begin(); it != clientsTmp.end(); it++) {
-				if (client.getNickname() != it->first->getNickname())
-					send(it->first->getSocket(), cmd[cmd.size() - 1].c_str(), cmd[cmd.size() - 1].length(), 0);
+				if (client.getNickname() != it->first->getNickname()) {
+					std::string	msg = client.getNickname() + " sent to " + channelTmp.getName() + " : " + cmd[cmd.size() - 1] + '\n'; 
+					send(it->first->getSocket(), msg.c_str(), msg.length(), 0);
+				}
 			}
 		}
 		else {

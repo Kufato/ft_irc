@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 11:21:42 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/08 14:50:41 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/09 17:59:38 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	Server::kick(Client &client, std::vector<std::string> cmd) {
 	
 	if (cmd.size() < 3)
 		return (dispLogs(ERR_NEEDMOREPARAMS, client.getSocket(), NULL));
-	if (cmd.size() > 3)
+	if (cmd.size() > 4)
 		return (dispLogs(ERR_TOOMANYPARAMS, client.getSocket(), NULL));
 	if (client.getNickname() == cmd[2])
 		return (dispLogs(ERR_AUTOKICK, client.getSocket(), NULL));
@@ -32,6 +32,8 @@ void	Server::kick(Client &client, std::vector<std::string> cmd) {
 	for (std::vector<std::pair<Client *, bool> >::iterator it = clientsTmp.begin(); it != clientsTmp.end(); it++) {
 		if (it->first->getNickname() == cmd[2]) {
 			channel->second->getMembers().erase(it);
+			if (cmd.size() == 4)
+				return (dispLogs(RPL_KICK, it->first->getSocket(), (void *)cmd[3].c_str()));
 			return (dispLogs(RPL_KICK, it->first->getSocket(), NULL));
 		}
 	}

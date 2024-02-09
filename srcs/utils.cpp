@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/08 14:50:18 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/09 14:50:43 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ bool	Server::clientExist(std::string nickname) {
 }
 
 Client	*Server::searchNameClient(std::string nickname) {
+	for (std::map<int, Client *>::iterator it = this->_listClients.begin(); it != this->_listClients.end(); it++)
+		std::cout << it->second->getNickname() << std::endl;
 	for (std::map<int, Client *>::iterator it = this->_listClients.begin(); it != this->_listClients.end(); it++) {
 		if (it->second->getNickname() == nickname)
 			return (it->second);

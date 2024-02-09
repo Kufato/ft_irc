@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:03:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/08 15:22:53 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/09 13:59:23 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ class	Channel {
 	public:
 		Channel(std::string name);
 		~Channel();
-		void						addClient(Client *client);
-		void						opClient(Client *client, bool mode);
+		void											addClient(Client *client);
+		void												opClient(Client *client, bool mode);
+		bool												memberPresent(Client client);
 		std::vector<std::pair<Client *, bool> >::iterator	findMember(Client client);
-		bool						memberPresent(Client client);
 
 		// Getters
 		int										getClientLimit();

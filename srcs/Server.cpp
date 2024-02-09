@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:10:15 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/08 15:53:59 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/09 18:03:25 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,15 @@ Server::Server(int port, std::string password) {
 }
 
 Server::~Server(void) {
-	close (this->_epollFd);
+	if (this->_epollFd)
+		close (this->_epollFd);
 	close (this->_serverSocket);
+	for (std::map<int, Client *>::iterator it = this->_listClients.begin(); it != this->_listClients.end(); it++) {
+		close(it->second->getSocket());
+		delete it->second;
+	}
+	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end(); it++)
+		delete it->second;
 	return ;
 }
 
@@ -206,13 +213,24 @@ void	Server::handleRequest(Client &client, std::string request)
 	return (dispLogs(ERR_UNKNOWNCOMMAND, client.getSocket(), (void *)cmd[0].c_str()));
 }
 
-void	Server::removeClient(Client &client) {
+/**
+ * Close the socket of the client
+ * 
+ * Remove his sockert from epoll
+ * 
+ * Remove the client from all the channel he join
+*/
+void Server::removeClient(Client &client) {
 	close(client.getSocket());
 	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, client.getSocket(), NULL);
 	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end(); it++) {
-		for (std::vector<std::pair<Client *, bool> >::iterator it2 = it->second->getMembers().begin(); it2 != it->second->getMembers().end(); it2++) {
-			if (it2->first->getNickname() == client.getNickname()) {
-				it->second->getMembers().erase(it2);
+		std::vector<std::pair<Client *, bool> > members = it->second->getMembers();
+		std::vector<std::pair<Client *, bool> >::iterator it2 = members.begin();
+		while (it2 != members.end()) {
+			if (it2->first->getNickname() == client.getNickname())
+				it2 = members.erase(it2);
+			else {
+				++it2;
 			}
 		}
 	}

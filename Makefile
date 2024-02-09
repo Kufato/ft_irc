@@ -6,7 +6,7 @@
 #    By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 11:26:17 by axcallet          #+#    #+#              #
-#    Updated: 2024/01/31 17:14:04 by axcallet         ###   ########.fr        #
+#    Updated: 2024/02/09 17:22:22 by axcallet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,9 +21,22 @@ INC			= -I inc/
 
 OBJ_DIR		= obj
 OBJ			= $(SRC:.cpp=.o)
-SRC			= main.cpp	\
-			Client.cpp	\
-			Server.cpp
+SRC			= ./srcs/Channel.cpp			\
+			./srcs/Client.cpp				\
+			./srcs/main.cpp				\
+			./srcs/Server.cpp				\
+			./srcs/utils.cpp				\
+			./srcs/signals.cpp				\
+			./srcs/commands/help.cpp		\
+			./srcs/commands/invite.cpp	\
+			./srcs/commands/join.cpp		\
+			./srcs/commands/kick.cpp		\
+			./srcs/commands/mode.cpp		\
+			./srcs/commands/nick.cpp		\
+			./srcs/commands/pass.cpp		\
+			./srcs/commands/privmsg.cpp	\
+			./srcs/commands/topic.cpp		\
+			./srcs/commands/user.cpp
 
 ########## RULES ##########
 
@@ -35,7 +48,7 @@ $(NAME): $(OBJ)
 
 %.o: %.cpp
 	@echo $(_CYAN)- Compiling $<$(END)
-	@$(CC) $(INC)-o $@ -c $< $(CFLAGS)
+	@$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
 	@echo $(_YELLOW)- Cleaning $(OBJ)$(END)
@@ -48,7 +61,7 @@ fclean: clean
 re: fclean all
 
 title :
-	@echo ''
+	@echo $(END)''
 	@echo 'Voici notre Intrepide Rat Cuisto'
 	@echo '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡤⠖⠂⠀⠀⠀'
 	@echo '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄⣮⣠⠦⠄⡀⠀⠀⠀⠀⠀⢀⣤⠟⣡⡴⠒⠈⠀⠀'
