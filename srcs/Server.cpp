@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+ /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
@@ -128,17 +128,18 @@ void	Server::handleNewClient(void) {
  * @param clientSocket the socket of the client sending data.
 */
 void	Server::handleClient(int clientSocket) {
-	int			bytesRead;
-	char		buff[2048];
+	int					bytesRead;
+	char				buff[2048];
+	std::string			request;
 	static std::string	strBuff = "";
-	std::string	request;
-	std::map<int, Client*>::iterator it = _listClients.find(clientSocket);
-	Client *client = it->second ; // need to get the adress of the client object whose socket = clientSocket
+
+	std::map<int, Client*>::iterator	it = _listClients.find(clientSocket);
+	Client								*client = it->second;
 	
 	memset(&buff, 0, sizeof(buff));
 	bytesRead = recv(clientSocket, buff, sizeof(buff), 0);
 	strBuff += buff;
-	size_t end = strBuff.find("\n");
+	size_t end = strBuff.find_first_of("\n\r");
 	if (end != std::string::npos) {
 		if (bytesRead <= 0) {
 			if (!bytesRead)
@@ -210,7 +211,7 @@ void	Server::handleRequest(Client &client, std::string request)
 		case 9:
 			return (this->help(client));
 	}
-	return (dispLogs(ERR_UNKNOWNCOMMAND, client.getSocket(), (void *)cmd[0].c_str()));
+	return (dispLogs(ERR_, client.getSocket()));
 }
 
 /**

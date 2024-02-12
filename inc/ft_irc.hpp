@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/09 18:10:08 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/12 18:26:38 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,77 +29,73 @@
 #include "Channel.hpp"
 
 // Functions
-void	newSignal(int signum);
-bool	checkCharacters(std::string s);
+void			newSignal(int signum);
+bool			checkCharacters(std::string s);
+std::string		concatString(std::vector<std::string> cmd);
 
+// Defines
+#define ERR_NOTINRANGE(client)							(": " + client + " :Your not in the authorized range\r\n")
+#define ERR_NORECIPIENT(client)							(": 411 " + client + " :No recipient given PRIVMSG\r\n")
+#define ERR_CMDNOTFOUND(client)							(": 421 " + client + " :Command not found\r\n")
+#define ERR_UNKNOWNMODE(client)							(": 472 " + client + " :Is unknown mode char to me\r\n")
+#define ERR_NOTEXTTOSEND(client)						(": 412 " + client + " :No text to send\r\n")
+#define ERR_SAMENICKNAME(client)						(": " + client + " :There is already your nickname\r\n")
+#define ERR_NOTREGISTERED(client)						(": 451 " + client + " :You have not registered\r\n")
+#define ERR_BADCHAR(client, name)						(": " + client + " " + name + " :Error you have used forbidden characters\r\n")
+#define ERR_PASSWDMISMATCH(client)						(": 464 " + client + " :Password incorrect\r\n")
+#define ERR_NOSUCHNICK(client, nick)					(": 401 " + client + " " + nick + " :No such nickname\r\n")
+#define ERR_UMODEUNKNOWNFLAG(client)					(": 501 " + client + " :Unknown MODE flag\r\n")
+#define ERR_PASSCREATECHANNEL(client)					(": " + client +  " :Channel dont need password at creation\r\n")
+#define ERR_ALREADYREGISTERED(client)					(": 462 " + client + " :You may not reregister\r\n")
+#define ERR_AUTOKICK(client, channel)					(": " + client + " " + channel + " :Cannot kick yourself\r\n")
+#define ERR_ALREADYIN(client, channel)					(": " + client + " " + channel + " :Your are already in the channel\r\n")
+#define ERR_TOOMUCHPARAMS(client, cmd)					(": " + client + " " + cmd + " :Too much parameters\r\n")
+#define	ERR_UNKNOWNCOMMAND(client, cmd)					(": " + client + " " + cmd + " :")
+#define ERR_NICKNAMEINUSE(client, nick)					(": 433 " + client + " " + nick + " :Nickname is already in use\r\n")
+#define ERR_NEEDMOREPARAMS(client, cmd)					(": 461 " + client + " " + cmd + " :Not enough parameters\r\n")
+#define ERR_NOTONCHANNEL(client, channel)				(": 442 " + client + " " + channel + " :Not on that channel\r\n")
+#define ERR_CHANNELISFULL(client, channel)				(": 471 " + client + " " + channel + " :Cannot join channel (+l)\r\n")
+#define ERR_NOSUCHCHANNEL(client, channel)				(": 403 " + client + " " + channel + " :No such channel\r\n")
+#define ERR_BADCHANNELKEY(client, channel)				(": 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
+#define ERR_ERRONUSENICKNAME(client, nick)				(": 432 " + client + " " + nick + " :Erroneus nickname\r\n")
+#define ERR_ERRONUSEUSERNAME(client, user)				(": " + client + " " + user + " :Erroneus username\r\n")
+#define ERR_BADCHARCHANNEL(client, channel)				(": " + client + " " + channel + " :Channel's name must start with '#'\r\n")
+#define ERR_INVITEONLYCHAN(client, channel)				(": 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
+#define ERR_CHANOPRIVSNEEDED(client, channel)			(": 482 " + client + " " + channel + " :You're not channel operator\r\n")
+#define ERR_CANNOTSENDTOCHAN(client, channel)			(": 404 " + client + " " + channel + " :Cannot send to channel\r\n")
+#define ERR_USERONCHANNEL(client, nick, channel)		(": 303 " + client + " " + nick + " " + channel + " :is already on channel\r\n")
+#define ERR_USERNOTINCHANNEL(client, nick, channel)		(": 441 " + client + " " + nick + " " + channel + " :They aren't on that channel\r\n")
 
-// MSG PASS
-#define RPL_PASSACCEPTED		": Password accepted - you are now registered"
-#define	ERR_PASSWDMISMATCH		"Error: password incorrect"
-#define ERR_ALREADYREGISTRED	"Error: you are already registered"
+//PRIVMSG BUILDERS
+#define USER_MESSAGES(client, target, msg)				(":" + client + " PRIVMSG " + target + " :" +  msg + "\r\n")
+#define CHANNEL_MESSAGES(client, channel, msg)			(":" + client + " PRIVMSG " + channel + " :" + msg + "\r\n")
 
-// MSG NICK
-#define RPL_WELCOME				": Welcome to the Internet Relay Network !"
-#define ERR_SAMENICKNAME		"Error: you already have this nickname"
-#define ERR_NONICKNAMEGIVEN 	"Error: no nickname given"
-#define ERR_ERRONEUSNICKNAME 	"Error: invalid character in your nickname"
-#define ERR_NICKNAMEINUSE		"Error: nickname is already in use"
+//SERVER REPLIES
+#define RPL_WELCOME(client)								(": 001 " + client + " :Welcome in the IRC world, " + client + "\r\n")
+#define RPL_JOIN(nick, channel)							(":" + nick + " JOIN " + channel + "\r\n")
+#define RPL_PART(client, channel)						(":" + client + " PART " + channel + "\r\n")
+#define RPL_NICK(oldNick, newNick)						(":" + oldNick + " NICK " + newNick + "\r\n")
+#define RPL_NOTOPIC(client, channel)					(": 331 " + client + " " + channel + " :No topic is set\r\n")
+#define RPL_TOPIC(client, channel, topic)				(": 332 " + client + " " + channel + " :" + topic + "\r\n")
+#define RPL_KICK(client, channel, target)				(":" + client + " KICK " + channel + " " + target + " :" + reason + "\r\n")
+#define RPL_MODE(client, channel, mode, name)			(":" + client + " MODE " + channel + " " + mode + " " + name + "\r\n")
+#define RPL_CHANNELMODEIS(client, channel, mode)		(": 324 " + client + " MODE " + channel + " " + mode + "\r\n")
+#define RPL_INVITERCVR(client, invitee, channel)		(":" + client + " INVITE " + invitee + " " + channel + "\r\n")
+#define RPL_INVITESNDR(client, invitee, channel)		(": 341 " + client + " " + invitee + " " + channel + "\r\n")
+#define RPL_KICKREASON(client, channel, target, reason)	(":" + client + " KICK " + channel + " " + target + "\r\n")
 
-// MSG USER
-#define	ERR_ALREADYREGISTRED	"Error: you are already registered"
-
-// MSG PRIVMSG
-#define ERR_NOUSERFOUND			"Error: the user doesn't exist"
-#define ERR_NOTEXTTOSEND 		"Error: your message cannot be empty"
-#define ERR_NOCHANNELFOUND 		"Error: the channel doesn't exist"
-
-// MSG MODE
-#define ERR_NOOPERATOR			"Error: your are oerator in this channel"
-#define ERR_UNKNOWNMODE			"Error: mode doesn't exist."
-#define ERR_NOTONCHANNEL		"Error: client is not in this channel"
-#define ERR_CHANOPRIVSNEEDED	"Error: channel operator privileges requiered"
-#define ERR_NOTINRANGE			"Error: number given is too high/low"
-#define RPL_CHANNELMODEIS		": mode changed successfully"
-
-// MSG KICK
-#define RPL_KICK				": your are kick from a channel"
-#define ERR_AUTOKICK			"Error: you can't autokick"
-
-// MSG INVITE
-#define ERR_ALREADYINVITED		"Error: this client has already received an invitation"
-#define RPL_INVITE				": you have receive a invitation for the channel"
-#define RPL_SENDINVITATION		": you have send a invitation to"
-
-// MSG JOIN
-#define ERR_PASSCREATECHANNEL	"Error: you don't need password to create a channel"
-#define ERR_NOINVITATION		"Error: you don't have an invitation for this channel"
-#define ERR_NOPASS				"Error: you have to provide a password to enter in this channel"
-#define ERR_BADPASS				"Error: you provide the wrong password"
-#define ERR_CHANNELFULL			"Error: the channel is full"
-#define ERR_ALREADYIN			"Error: you already joined this channel"
-#define RPL_CHANNELCREATED		": the channel was successfully created"
-#define	RPL_CHANNELJOINED		": the channel was successfully joined"
-
-// MSG HELP
-#define RPL_HELP				"Here is the list of all available commands :\n \
-								PASS : use it when you need to log and enter the password\n \
-								NICK : set a new NickName\n \
-								USER : set a new UserName\n \
-								KICK : eject a client from the channel\n \
-								INVITE : invite a client to a channel\n \
-								TOPIC : change or view the channel topic\n \
-								PRIVMSG : send a private message\n \
-								JOIN : joins a channel\n \
-								MODE : change the channel's mode\n 	\
-								i: set/remove invite only channel\n 	\
-								t: set/remove the restrictions of the TOPIC command to channel operators\n 	\
-								k: set/remove the channel key (password)\n 	\
-								o: give/take channel operator privilege\n 	\
-								l: set/remove the user limit to channel\n"
-
-// MSG OTHER
-#define ERR_NEEDMOREPARAMS		"Error: not enough parameters"
-#define ERR_TOOMANYPARAMS		"Error: too many parameters"
-#define ERR_INVALIDCHAR			"Error: character(s) used is invalid"
-#define ERR_UNKNOWNCOMMAND		"Error: command unknown"
-#define	ERR_BADCHARCHANNEL		"Error: channel's name must start with '#'"
+#define RPL_HELP	"Here is the list of all available commands :\n \
+					PASS : use it when you need to log and enter the password\n \
+					NICK : set a new NickName\n \
+					USER : set a new UserName\n \
+					KICK : eject a client from the channel\n \
+					INVITE : invite a client to a channel\n \
+					TOPIC : change or view the channel topic\n \
+					PRIVMSG : send a private message\n \
+					JOIN : joins a channel\n \
+					MODE : change the channel's mode\n 	\
+					i: set/remove invite only channel\n 	\
+					t: set/remove the restrictions of the TOPIC command to channel operators\n 	\
+					k: set/remove the channel key (password)\n 	\
+					o: give/take channel operator privilege\n 	\
+					l: set/remove the user limit to channel\n"

@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:50:06 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/08 14:50:35 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/12 13:45:13 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 void	Server::invite(Client &client, std::vector<std::string> cmd) {
 
 	if (cmd.size() < 3)
-		return (dispLogs(ERR_NEEDMOREPARAMS, client.getSocket(), NULL));
+		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	if (cmd.size() > 3)
-		return (dispLogs(ERR_TOOMANYPARAMS, client.getSocket(), NULL));
+		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[2]);
 	if (channel == this->_listChannels.end())
-		return (dispLogs(ERR_NOCHANNELFOUND, client.getSocket(), NULL));
+		return (dispLogs(ERR_NOSUCHCHANNEL(client.getNickname(), cmd[2]), client.getSocket()));
 	std::vector<std::pair<Client *, bool> >::iterator operatortmp = channel->second->findMember(client);
 	if (operatortmp == channel->second->getMembers().end())
-		return (dispLogs(ERR_NOTONCHANNEL, client.getSocket(), NULL));
+		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), channel->second->getName()), client.getSocket()));
 	if (!operatortmp->second)
 		return (dispLogs(ERR_CHANOPRIVSNEEDED, client.getSocket(), NULL));
 	Client *clientTmp = searchNameClient(cmd[1]);

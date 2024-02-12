@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 15:26:40 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/09 17:52:10 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:34:24 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 void Server::nick(Client &client, std::vector<std::string> cmd) {
 	if (cmd.size() < 2)
-		return (dispLogs(ERR_NEEDMOREPARAMS, client.getSocket(), NULL));
+		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	if (cmd.size() > 2)
-		return (dispLogs(ERR_TOOMANYPARAMS, client.getSocket(), NULL));
+		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	if (client.getNickname() == cmd[1])
-		return (dispLogs(ERR_SAMENICKNAME, client.getSocket(), NULL));
+		return (dispLogs(ERR_SAMENICKNAME(client.getSocket()), client.getSocket()));
 	if (!checkCharacters(cmd[1]))
-		return (dispLogs(ERR_ERRONEUSNICKNAME, client.getSocket(), NULL));
+		return (dispLogs(ERR_ERRONEUSNICKNAME(client.getNickname(), cmd[1]), client.getSocket()));
 	if (clientExist(cmd[1]))
-		return (dispLogs(ERR_NICKNAMEINUSE, client.getSocket(), NULL));
+		return (dispLogs(ERR_NICKNAMEINUSE(client.getNickname(), cmd[1]), client.getSocket()));
 	if (!client.getUsername().empty() && client.getNickname().empty()) {
 		client.setRegistered(true);
-		dispLogs(RPL_WELCOME, client.getSocket(), NULL);
+		dispLogs(RPL_WELCOME(client.getNickname()), client.getSocket());
 	}
 	client.setNickname(cmd[1]);
 }

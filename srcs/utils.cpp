@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/09 14:50:43 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/12 13:19:24 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,9 @@ Channel	*Server::searchNameChannel(std::string name) {
 	return (NULL);
 }
 
-void	Server::dispLogs(std::string str, int clientFD, void *param) {
+void	Server::dispLogs(std::string str, int clientFD) {
 	std::string tmp = "[IRC] ";
-	if (param)
-		tmp += (char *)param;
 	tmp += str;
-	tmp += '\n';
 	send(clientFD, tmp.c_str(), tmp.length(), 0);
 }
 
@@ -83,4 +80,14 @@ std::vector<std::string>	Server::splitRequest(std::string request)
 		}
 	}
 	return (res);
+}
+
+std::string		concatString(std::vector<std::string> cmd)
+{
+	if (cmd.empty())
+		return ("");
+	std::string	s = cmd[0];
+	for (size_t i = 0; i < cmd.size(); i++)
+		s += " " + cmd[i];
+	return s;
 }
