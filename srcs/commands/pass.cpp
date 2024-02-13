@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 13:54:00 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/12 14:46:41 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/13 14:01:53 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,18 @@
 */
 void	Server::pass(Client &client, std::vector<std::string> cmd)
 {
+	std::cout << client.getNickname() << "trying PASS..." << std::endl;
 	if (client.isRegistered())
+	{
+		std::cout << "Already registered" << std::endl;
 		return (dispLogs(ERR_ALREADYREGISTERED(client.getNickname()), client.getSocket()));
+	}
 	if (cmd.size() < 2)
 		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	if (cmd.size() > 2)
 		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	if (this->_password == cmd[1]) {
+		std::cout << "registered!" << std::endl;
 		client.setLogged(true);
 		// return (dispLogs(RPL_PASSACCEPTED, client.getSocket(), NULL));
 	}

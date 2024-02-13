@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 11:37:10 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/13 15:06:43 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ std::string		concatString(std::vector<std::string> cmd);
 #define RPL_PART(client, channel)						(":" + client + " PART " + channel + "\r\n")
 #define RPL_NICK(oldNick, newNick)						(":" + oldNick + " NICK " + newNick + "\r\n")
 #define RPL_NOTOPIC(client, channel)					(": 331 " + client + " " + channel + " :No topic is set\r\n")
-#define RPL_TOPIC(client, channel, topic)				(": 332 " + client + " " + channel + " :" + topic + "\r\n")
+#define RPL_TOPIC(client, channel, topic)				(": 332 " + client + " TOPIC " + channel + " :" + topic + "\r\n")
 #define RPL_KICK(client, channel, target)				(":" + client + " KICK " + channel + " " + target + "\r\n")
 #define RPL_MODE(client, channel, mode, name)			(":" + client + " MODE " + channel + " " + mode + " " + name + "\r\n")
 #define RPL_CHANNELMODEIS(client, channel, mode)		(": 324 " + client + " MODE " + channel + " " + mode + "\r\n")

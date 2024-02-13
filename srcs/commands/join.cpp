@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:09:30 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 11:34:24 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/13 15:02:02 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 		this->_listChannels.insert(std::pair<std::string, Channel *>(cmd[1], newChannel));
 		newChannel->addClient(&client);
 		newChannel->opClient(&client, true);
-		std::cout << newChannel->getMembers()[0].first->getNickname() << std::endl;
-		return (dispLogs(RPL_JOIN(client.getNickname(), cmd[1]), client.getSocket()));
+		dispLogs(RPL_JOIN(client.getNickname(), cmd[1]), client.getSocket());
+		newChannel->sendToAll(newChannel->namReplyMsg());
+		return (newChannel->sendToAll(": 366 " + newChannel->getName() + " :End of /NAMES list\r\n"));
 	}
 	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[1]);
 	std::vector<std::pair<Client *, bool> > listMembers = channel->second->getMembers();
@@ -58,5 +59,7 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 		listInvitations.erase(it);
 	channel->second->addClient(&client);
 	std::cout << channel->second->getMembers()[0].first->getNickname() << std::endl;
-	return (dispLogs(RPL_JOIN(client.getNickname(), cmd[1]), client.getSocket()));
+	dispLogs(RPL_JOIN(client.getNickname(), cmd[1]), client.getSocket());
+	channel->second->sendToAll(channel->second->namReplyMsg());
+	return (channel->second->sendToAll(": 366 " + channel->second->getName() + " :End of /NAMES list\r\n"));
 }

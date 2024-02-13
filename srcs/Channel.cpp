@@ -35,6 +35,30 @@ std::vector<std::pair<Client *, bool> >::iterator	Channel::findMember(Client cli
 	return (_members.end());
 }
 
+std::string		Channel::namReplyMsg()
+{
+	std::string s = ": 353 " + _name + " :";
+	for (std::vector<std::pair<Client *, bool> >::iterator it = _members.begin(); it != _members.end(); it++)
+	{
+		if (it->second)
+			s += "@";
+		else
+			s += "+";
+		s += it->first->getNickname();
+		s += " ";
+	}
+	s += "\r\n";
+	return s;
+}
+
+void	Channel::sendToAll(std::string msg)
+{
+	for (std::vector<std::pair<Client *, bool> >::iterator it = _members.begin(); it != _members.end(); it++)
+	{
+		send(it->first->getSocket(), msg.c_str(), msg.length(), 0);
+	}
+}
+
 bool	Channel::memberPresent(Client client)
 {
 	std::vector<std::pair<Client *, bool> >::iterator it;

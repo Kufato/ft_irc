@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 13:27:11 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/13 15:18:49 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ Channel	*Server::searchNameChannel(std::string name) {
 }
 
 void	Server::dispLogs(std::string str, int clientFD) {
-	std::string tmp = "[IRC] ";
-	tmp += str;
-	send(clientFD, tmp.c_str(), tmp.length(), 0);
+	// std::string tmp = "[IRC] ";
+	// tmp += str;
+	send(clientFD, str.c_str(), str.length(), 0);
 }
 
 bool	checkCharacters(std::string s) {
@@ -66,7 +66,7 @@ std::vector<std::string>	Server::splitRequest(std::string request)
 	size_t pos = 0;
 	size_t posend = 0;
 	while (pos != std::string::npos) {
-		pos = request.find_first_not_of("\\n", posend);
+		pos = request.find_first_not_of(" \n", posend);
 		if (pos != std::string::npos) {
 			if (request[pos] == ':') {
 				if (request[pos + 1])

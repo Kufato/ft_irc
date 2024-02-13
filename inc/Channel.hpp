@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:03:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/09 13:59:23 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/13 14:54:05 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ class	Channel {
 		void												opClient(Client *client, bool mode);
 		bool												memberPresent(Client client);
 		std::vector<std::pair<Client *, bool> >::iterator	findMember(Client client);
+		std::string											namReplyMsg();
+		void												sendToAll(std::string msg);
 
 		// Getters
 		int										getClientLimit();

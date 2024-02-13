@@ -17,6 +17,7 @@ Server::Server(int port, std::string password) {
 	this->_port = port;
 	this->_password = password;
 	this->_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+	this->_epollFd = 0;
 	if (this->_serverSocket == -1)
 		throw std::logic_error("Couldn't create socket.");
 	this->_serverAddr.sin_family = AF_INET;
@@ -139,6 +140,8 @@ void	Server::handleClient(int clientSocket) {
 	memset(&buff, 0, sizeof(buff));
 	bytesRead = recv(clientSocket, buff, sizeof(buff), 0);
 	strBuff += buff;
+	while (strBuff.find_first_not_of("\n\r") != std::string::npos)
+	{
 	size_t end = strBuff.find_first_of("\n\r");
 	if (end != std::string::npos) {
 		if (bytesRead <= 0) {
@@ -155,6 +158,8 @@ void	Server::handleClient(int clientSocket) {
 		this->handleRequest(*client, request);
 		// if (msg != "")
 		// 	send(clientSocket, msg.c_str(), msg.length(), 0);
+	}
+
 	}
 }
 
@@ -177,18 +182,18 @@ void	Server::handleRequest(Client &client, std::string request)
 			std::cout << "\"" << cmd[i] << "\"" << " ";
 	}
 	std::cout << std::endl;
-	std::string commands[10] = {"PASS", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP"};
+	std::string commands[11] = {"PASS", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP", "QUIT"};
 	int i;
-	for (i = 0; i < 10; i++) {
+	for (i = 0; i < 11; i++) {
 		if (cmd[0] == commands[i]) {
 			std::cout << "Found command " << commands[i] << std::endl;
 			break;
 		}
 	}
 	if (i && !client.isLogged())
-		return (dispLogs(": register by using the command PASS <password>", client.getSocket()));
+		return (dispLogs(": register by using the command PASS <password>\r\n", client.getSocket()));
 	if (i > 2 && !client.isRegistered())
-		return (dispLogs(": log in by using NICK <nicname> and USER <username>", client.getSocket()));
+		return (dispLogs(": log in by using NICK <nicname> and USER <username>\r\n", client.getSocket()));
 	switch (i) {
 		case 0:
 			return (this->pass(client, cmd));
@@ -210,6 +215,8 @@ void	Server::handleRequest(Client &client, std::string request)
 			return (this->join(client, cmd));
 		case 9:
 			return (this->help(client));
+		case 10:
+			removeClient(client); 
 	}
 	return (dispLogs(ERR_CMDNOTFOUND(client.getNickname()), client.getSocket()));
 }
