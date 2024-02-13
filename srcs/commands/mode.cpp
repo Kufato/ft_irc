@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:53:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/12 17:56:03 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/13 11:37:48 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	Server::mode_k(bool newmode, Client &client, std::vector<std::string> cmd, 
 		if (cmd.size() < 4)
 			return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 		if (!checkCharacters(cmd[3]))
-			return (dispLogs(ERR_BADCHAR(client.getNickname(), cmd[3]), client.getSocket(), NULL));
+			return (dispLogs(ERR_BADCHAR(client.getNickname(), cmd[3]), client.getSocket()));
 		channel->second->setPassword(cmd[3]);
 	}
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));

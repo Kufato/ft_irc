@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/12 18:26:38 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/13 11:37:10 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ std::string		concatString(std::vector<std::string> cmd);
 #define ERR_BADCHANNELKEY(client, channel)				(": 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
 #define ERR_ERRONUSENICKNAME(client, nick)				(": 432 " + client + " " + nick + " :Erroneus nickname\r\n")
 #define ERR_ERRONUSEUSERNAME(client, user)				(": " + client + " " + user + " :Erroneus username\r\n")
+#define ERR_ALREADYINVITED(client, channel)				(": " + client + " " + channel + " :This user is already invite\r\n")
 #define ERR_BADCHARCHANNEL(client, channel)				(": " + client + " " + channel + " :Channel's name must start with '#'\r\n")
 #define ERR_INVITEONLYCHAN(client, channel)				(": 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
 #define ERR_CHANOPRIVSNEEDED(client, channel)			(": 482 " + client + " " + channel + " :You're not channel operator\r\n")
@@ -77,25 +78,25 @@ std::string		concatString(std::vector<std::string> cmd);
 #define RPL_NICK(oldNick, newNick)						(":" + oldNick + " NICK " + newNick + "\r\n")
 #define RPL_NOTOPIC(client, channel)					(": 331 " + client + " " + channel + " :No topic is set\r\n")
 #define RPL_TOPIC(client, channel, topic)				(": 332 " + client + " " + channel + " :" + topic + "\r\n")
-#define RPL_KICK(client, channel, target)				(":" + client + " KICK " + channel + " " + target + " :" + reason + "\r\n")
+#define RPL_KICK(client, channel, target)				(":" + client + " KICK " + channel + " " + target + "\r\n")
 #define RPL_MODE(client, channel, mode, name)			(":" + client + " MODE " + channel + " " + mode + " " + name + "\r\n")
 #define RPL_CHANNELMODEIS(client, channel, mode)		(": 324 " + client + " MODE " + channel + " " + mode + "\r\n")
 #define RPL_INVITERCVR(client, invitee, channel)		(":" + client + " INVITE " + invitee + " " + channel + "\r\n")
 #define RPL_INVITESNDR(client, invitee, channel)		(": 341 " + client + " " + invitee + " " + channel + "\r\n")
-#define RPL_KICKREASON(client, channel, target, reason)	(":" + client + " KICK " + channel + " " + target + "\r\n")
+#define RPL_KICKREASON(client, channel, target, reason)	(":" + client + " KICK " + channel + " " + target + " :" + reason + "\r\n")
 
-#define RPL_HELP	"Here is the list of all available commands :\n \
-					PASS : use it when you need to log and enter the password\n \
-					NICK : set a new NickName\n \
-					USER : set a new UserName\n \
-					KICK : eject a client from the channel\n \
-					INVITE : invite a client to a channel\n \
-					TOPIC : change or view the channel topic\n \
-					PRIVMSG : send a private message\n \
-					JOIN : joins a channel\n \
-					MODE : change the channel's mode\n 	\
-					i: set/remove invite only channel\n 	\
-					t: set/remove the restrictions of the TOPIC command to channel operators\n 	\
-					k: set/remove the channel key (password)\n 	\
-					o: give/take channel operator privilege\n 	\
-					l: set/remove the user limit to channel\n"
+#define RPL_HELP	"Here is the list of all available commands :\r\n \
+					PASS : use it when you need to log and enter the password\r\n \
+					NICK : set a new NickName\r\n \
+					USER : set a new UserName\r\n \
+					KICK : eject a client from the channel\r\n \
+					INVITE : invite a client to a channel\r\n \
+					TOPIC : change or view the channel topic\r\n \
+					PRIVMSG : send a private message\r\n \
+					JOIN : joins a channel\r\n \
+					MODE : change the channel's mode\r\n 	\
+					i: set/remove invite only channel\r\n 	\
+					t: set/remove the restrictions of the TOPIC command to channel operators\r\n 	\
+					k: set/remove the channel key (password)\r\n 	\
+					o: give/take channel operator privilege\r\n 	\
+					l: set/remove the user limit to channel\r\n"

@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 11:21:42 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/12 18:04:34 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/13 11:37:29 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	Server::kick(Client &client, std::vector<std::string> cmd) {
 	if (cmd.size() > 4)
 		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	if (client.getNickname() == cmd[2])
-		return (dispLogs(ERR_AUTOKICK(client.getNickname(), cmd[1]), client.getSocket(), NULL));
+		return (dispLogs(ERR_AUTOKICK(client.getNickname(), cmd[1]), client.getSocket()));
 	if (channel == this->_listChannels.end())
 		return (dispLogs(ERR_NOSUCHCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
 	std::vector<std::pair<Client *, bool> >::iterator operatortmp = channel->second->findMember(client);
@@ -33,8 +33,8 @@ void	Server::kick(Client &client, std::vector<std::string> cmd) {
 		if (it->first->getNickname() == cmd[2]) {
 			channel->second->getMembers().erase(it);
 			if (cmd.size() == 4)
-				return (dispLogs(RPL_KICKREASON(client.getNickname(), cmd[1], cmd[2]), it->first->getSocket()));
-			return (dispLogs(RPL_KICK(client.getNickname(), cmd[1], cmd[2], cmd[3]), it->first->getSocket()));
+				return (dispLogs(RPL_KICKREASON(client.getNickname(), cmd[1], cmd[2], cmd[3]), it->first->getSocket()));
+			return (dispLogs(RPL_KICK(client.getNickname(), cmd[1], cmd[2]), it->first->getSocket()));
 		}
 	}
 	return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));

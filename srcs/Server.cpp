@@ -186,9 +186,9 @@ void	Server::handleRequest(Client &client, std::string request)
 		}
 	}
 	if (i && !client.isLogged())
-		return (dispLogs(": register by using the command PASS <password>", client.getSocket(), NULL));
+		return (dispLogs(": register by using the command PASS <password>", client.getSocket()));
 	if (i > 2 && !client.isRegistered())
-		return (dispLogs(": log in by using NICK <nicname> and USER <username>", client.getSocket(), NULL));
+		return (dispLogs(": log in by using NICK <nicname> and USER <username>", client.getSocket()));
 	switch (i) {
 		case 0:
 			return (this->pass(client, cmd));
@@ -211,7 +211,7 @@ void	Server::handleRequest(Client &client, std::string request)
 		case 9:
 			return (this->help(client));
 	}
-	return (dispLogs(ERR_, client.getSocket()));
+	return (dispLogs(ERR_CMDNOTFOUND(client.getNickname()), client.getSocket()));
 }
 
 /**
@@ -230,9 +230,8 @@ void Server::removeClient(Client &client) {
 		while (it2 != members.end()) {
 			if (it2->first->getNickname() == client.getNickname())
 				it2 = members.erase(it2);
-			else {
+			else
 				++it2;
-			}
 		}
 	}
 	std::map<int, Client *>::iterator it = this->_listClients.find(client.getSocket());

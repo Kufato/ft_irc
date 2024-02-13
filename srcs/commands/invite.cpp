@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:50:06 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/12 13:45:13 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/13 11:33:47 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,22 @@ void	Server::invite(Client &client, std::vector<std::string> cmd) {
 	if (operatortmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), channel->second->getName()), client.getSocket()));
 	if (!operatortmp->second)
-		return (dispLogs(ERR_CHANOPRIVSNEEDED, client.getSocket(), NULL));
+		return (dispLogs(ERR_CHANOPRIVSNEEDED(client.getNickname(), cmd[2]), client.getSocket()));
 	Client *clientTmp = searchNameClient(cmd[1]);
 	if (clientTmp) {
 		std::vector<std::string> invitationsTmp = clientTmp->getListInvitation();
 		std::vector<std::string>::iterator it = invitationsTmp.begin();
-		while (it != clientTmp->getListInvitation().end())
-		{
+		while (it != clientTmp->getListInvitation().end()) {
 			if (it->c_str() == cmd[2])
 				break;
 			it++;
 		}
 		if (it == clientTmp->getListInvitation().end())
-			return (dispLogs(ERR_ALREADYINVITED, client.getSocket(), NULL));
+			return (dispLogs(ERR_ALREADYINVITED(client.getNickname(), cmd[2]), client.getSocket()));
 		clientTmp->setInvitation(cmd[2]);
-		dispLogs(RPL_INVITE, clientTmp->getSocket(), (void *)cmd[2].c_str());
-		return (dispLogs(RPL_SENDINVITATION, client.getSocket(), (void *)cmd[1].c_str()));
+		dispLogs(RPL_INVITERCVR(client.getNickname(), cmd[1], cmd[2]), clientTmp->getSocket());
+		return (dispLogs(RPL_INVITESNDR(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 	}
-	return (dispLogs(ERR_NOTONCHANNEL, client.getSocket(), NULL));
+	return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[2]), client.getSocket()));
 	
 }
