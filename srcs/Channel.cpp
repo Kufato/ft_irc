@@ -35,9 +35,9 @@ std::vector<std::pair<Client *, bool> >::iterator	Channel::findMember(Client cli
 	return (_members.end());
 }
 
-std::string		Channel::namReplyMsg()
+std::string		Channel::namReplyMsg(Client client)
 {
-	std::string s = ": 353 " + _name + " :";
+	std::string s = ": 353 " + client.getNickname() + " = " + _name + " : ";
 	for (std::vector<std::pair<Client *, bool> >::iterator it = _members.begin(); it != _members.end(); it++)
 	{
 		if (it->second)

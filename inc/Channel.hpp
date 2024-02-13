@@ -6,7 +6,7 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:03:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 14:54:05 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/13 17:41:26 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class	Channel {
 		void												opClient(Client *client, bool mode);
 		bool												memberPresent(Client client);
 		std::vector<std::pair<Client *, bool> >::iterator	findMember(Client client);
-		std::string											namReplyMsg();
+		std::string											namReplyMsg(Client client);
 		void												sendToAll(std::string msg);
 
 		// Getters

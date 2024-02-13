@@ -6,7 +6,7 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 15:06:43 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/13 17:20:38 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ std::string		concatString(std::vector<std::string> cmd);
 #define RPL_TOPIC(client, channel, topic)				(": 332 " + client + " TOPIC " + channel + " :" + topic + "\r\n")
 #define RPL_KICK(client, channel, target)				(":" + client + " KICK " + channel + " " + target + "\r\n")
 #define RPL_MODE(client, channel, mode, name)			(":" + client + " MODE " + channel + " " + mode + " " + name + "\r\n")
-#define RPL_CHANNELMODEIS(client, channel, mode)		(": 324 " + client + " MODE " + channel + " " + mode + "\r\n")
+#define RPL_CHANNELMODEIS(client, channel, mode)		(": 324 " + client + " " + channel + " " + mode + "\r\n")
 #define RPL_INVITERCVR(client, invitee, channel)		(":" + client + " INVITE " + invitee + " " + channel + "\r\n")
 #define RPL_INVITESNDR(client, invitee, channel)		(": 341 " + client + " " + invitee + " " + channel + "\r\n")
 #define RPL_KICKREASON(client, channel, target, reason)	(":" + client + " KICK " + channel + " " + target + " :" + reason + "\r\n")

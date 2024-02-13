@@ -6,7 +6,7 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 15:18:49 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/13 17:04:18 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ std::string		concatString(std::vector<std::string> cmd)
 	if (cmd.empty())
 		return ("");
 	std::string	s = cmd[0];
-	for (size_t i = 0; i < cmd.size(); i++)
+	for (size_t i = 1; i < cmd.size(); i++)
 		s += " " + cmd[i];
 	return s;
 }

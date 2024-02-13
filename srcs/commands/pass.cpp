@@ -6,7 +6,7 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 13:54:00 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 14:01:53 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/13 17:47:36 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,8 @@
 */
 void	Server::pass(Client &client, std::vector<std::string> cmd)
 {
-	std::cout << client.getNickname() << "trying PASS..." << std::endl;
 	if (client.isRegistered())
-	{
-		std::cout << "Already registered" << std::endl;
 		return (dispLogs(ERR_ALREADYREGISTERED(client.getNickname()), client.getSocket()));
-	}
 	if (cmd.size() < 2)
 		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	if (cmd.size() > 2)

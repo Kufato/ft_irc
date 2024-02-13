@@ -6,7 +6,7 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:09:30 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 15:02:02 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/13 17:42:31 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 		newChannel->addClient(&client);
 		newChannel->opClient(&client, true);
 		dispLogs(RPL_JOIN(client.getNickname(), cmd[1]), client.getSocket());
-		newChannel->sendToAll(newChannel->namReplyMsg());
-		return (newChannel->sendToAll(": 366 " + newChannel->getName() + " :End of /NAMES list\r\n"));
+		return newChannel->sendToAll(newChannel->namReplyMsg(client));
+		// return (newChannel->sendToAll(": 366 " + newChannel->getName() + " :End of /NAMES list\r\n"));
 	}
 	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[1]);
 	std::vector<std::pair<Client *, bool> > listMembers = channel->second->getMembers();
@@ -60,6 +60,6 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 	channel->second->addClient(&client);
 	std::cout << channel->second->getMembers()[0].first->getNickname() << std::endl;
 	dispLogs(RPL_JOIN(client.getNickname(), cmd[1]), client.getSocket());
-	channel->second->sendToAll(channel->second->namReplyMsg());
-	return (channel->second->sendToAll(": 366 " + channel->second->getName() + " :End of /NAMES list\r\n"));
+	channel->second->sendToAll(channel->second->namReplyMsg(client));
+	// return (channel->second->sendToAll(": 366 " + channel->second->getName() + " :End of /NAMES list\r\n"));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:53:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 11:37:48 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/13 17:32:38 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	Server::mode_l(bool newmode, Client &client, std::vector<std::string> cmd, 
 void	Server::mode(Client &client, std::vector<std::string> cmd) {
 	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[1]);
 
-	if (cmd.size() < 3)
+	if (cmd.size() < 2)
 		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	if (cmd.size() > 4)
 		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
@@ -84,6 +84,8 @@ void	Server::mode(Client &client, std::vector<std::string> cmd) {
 	std::vector<std::pair<Client *, bool> >::iterator clientmp = channel->second->findMember(client);
 	if (clientmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
+	if (cmd.size() == 2)
+		return ;
 	if (!clientmp->second)
 		return (dispLogs(ERR_CHANOPRIVSNEEDED(client.getNickname(), cmd[1]), client.getSocket()));
 	if ((cmd[2][0] != '+' && cmd[2][0] != '-') || cmd[2].length() != 2)

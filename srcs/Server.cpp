@@ -109,7 +109,7 @@ void	Server::handleNewClient(void) {
 	memset(&clientAddr, 0, clientAddrLen);
 	clientFd = accept(this->_serverSocket, (struct sockaddr *)&clientAddr, &clientAddrLen);
 	if (clientFd == -1)
-		throw std::logic_error("Couldn't accept new client");
+		throw std::logic_error("Couldn't accept new client"); //NON
 	fcntl(clientFd, F_SETFL, O_NONBLOCK);
 	this->_event.events = EPOLLIN;
 	this->_event.data.fd = clientFd;
@@ -117,7 +117,7 @@ void	Server::handleNewClient(void) {
 		throw std::logic_error("Couldn't add the new client");
 	this->_listClients.insert(std::pair<int, Client *>(clientFd, new Client(clientFd)));
 	std::cout << "Connection establish'ed sheeran" << std::endl;
-	send(clientFd, "Please enter the server's password using : PASS <password>\n", 59, 0);
+	send(clientFd, "Please enter the server's password using : PASS <password>\r\n", 59, 0);
 	return ;
 }
 
@@ -182,9 +182,9 @@ void	Server::handleRequest(Client &client, std::string request)
 			std::cout << "\"" << cmd[i] << "\"" << " ";
 	}
 	std::cout << std::endl;
-	std::string commands[11] = {"PASS", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP", "QUIT"};
+	std::string commands[12] = {"PASS", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP", "QUIT", "WHO"};
 	int i;
-	for (i = 0; i < 11; i++) {
+	for (i = 0; i < 12; i++) {
 		if (cmd[0] == commands[i]) {
 			std::cout << "Found command " << commands[i] << std::endl;
 			break;
@@ -217,6 +217,8 @@ void	Server::handleRequest(Client &client, std::string request)
 			return (this->help(client));
 		case 10:
 			removeClient(client); 
+		case 11:
+			return ;
 	}
 	return (dispLogs(ERR_CMDNOTFOUND(client.getNickname()), client.getSocket()));
 }
