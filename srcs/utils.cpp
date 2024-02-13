@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/12 13:19:24 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/13 13:27:11 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ std::vector<std::string>	Server::splitRequest(std::string request)
 	size_t pos = 0;
 	size_t posend = 0;
 	while (pos != std::string::npos) {
-		pos = request.find_first_not_of(" \n", posend);
+		pos = request.find_first_not_of("\\n", posend);
 		if (pos != std::string::npos) {
 			if (request[pos] == ':') {
 				if (request[pos + 1])
