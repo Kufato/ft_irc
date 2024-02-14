@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:44:11 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/12 14:34:38 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:33:02 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void Server::privmsg(Client &client, std::vector<std::string> cmd) {
 			for (std::vector<std::pair<Client *, bool> >::iterator it = clientsTmp.begin(); it != clientsTmp.end(); it++) {
 				if (client.getNickname() != it->first->getNickname()) {
 					std::string	msg = client.getNickname() + " sent to " + channelTmp.getName() + " : " + cmd[cmd.size() - 1] + '\n'; 
-					send(it->first->getSocket(), msg.c_str(), msg.length(), 0);
+					dispLogs(CHANNEL_MESSAGES(client.getNickname(), channelTmp.getName(), cmd[2]), it->first->getSocket());
 				}
 			}
 		}
@@ -35,7 +35,7 @@ void Server::privmsg(Client &client, std::vector<std::string> cmd) {
 			if (!receiver)
 				return (dispLogs(ERR_NOSUCHNICK(client.getNickname(), cmd[i]), client.getSocket()));
 			std::string	msg = client.getNickname() + " sent to you: " + cmd[cmd.size() - 1] + '\n'; 
-			send(receiver->getSocket(), msg.c_str(), msg.length(), 0);
+			dispLogs(USER_MESSAGES(client.getNickname(), receiver->getNickname(), cmd[2]), receiver->getSocket());
 		}
 	}
 }

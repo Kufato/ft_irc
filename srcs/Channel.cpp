@@ -16,23 +16,20 @@ void	Channel::addClient(Client *client)
 
 void	Channel::opClient(Client *client, bool mode)
 {
-	std::vector<std::pair<Client *, bool> >::iterator clientmp = this->findMember(*client);
+	std::vector<std::pair<Client *, bool> >::iterator clientmp = this->findMember(client->getNickname());
 	if (clientmp != _members.end())
 		clientmp->second = mode;
 }
 
-std::vector<std::pair<Client *, bool> >::iterator	Channel::findMember(Client client)
+std::vector<std::pair<Client *, bool> >::iterator	Channel::findMember(std::string nickname)
 {
 	std::vector<std::pair<Client *, bool> >::iterator it;
 	for (it = _members.begin(); it != _members.end(); it++)
 	{
-		if (it->first->getNickname() == client.getNickname())
-		{
-			std::cout << it->first->getNickname() << std::endl;
-			return (it);
-		}
+		if (it->first->getNickname() == nickname)
+			break ;
 	}
-	return (_members.end());
+	return (it);
 }
 
 std::string		Channel::namReplyMsg(Client client)

@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:01:33 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/12 13:18:55 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/14 17:03:26 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ class	Server {
 		void	handleSignalWrapper(int signum) const;
 
 	// Utils
-		bool	clientExist(std::string nickname);
 		void	dispLogs(std::string str, int clientFD);
 		Client	*searchNameClient(std::string nickname);
 		Channel	*searchNameChannel(std::string name);

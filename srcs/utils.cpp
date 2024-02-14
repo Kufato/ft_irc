@@ -3,26 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 17:04:18 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/14 17:03:32 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Channel.hpp"
 
-bool	Server::clientExist(std::string nickname) {
-	for (std::map<int, Client *>::iterator it = this->_listClients.begin(); it != this->_listClients.end(); it++) {
-		if (it->second->getNickname() == nickname)
-			return (true);
-	}
-	return (false);
-}
-
+/**
+ * Search for a client using nickname
+ *
+ * @param nickname the name to look for
+ * @return the adress of the client found, NULL if it isn't found
+*/
 Client	*Server::searchNameClient(std::string nickname) {
-	for (std::map<int, Client *>::iterator it = this->_listClients.begin(); it != this->_listClients.end(); it++)
-		std::cout << it->second->getNickname() << std::endl;
 	for (std::map<int, Client *>::iterator it = this->_listClients.begin(); it != this->_listClients.end(); it++) {
 		if (it->second->getNickname() == nickname)
 			return (it->second);
@@ -30,6 +26,12 @@ Client	*Server::searchNameClient(std::string nickname) {
 	return (NULL);
 }
 
+/**
+ * Search for a channel using a name
+ *
+ * @param name the name of the channel to look for
+ * @return the adress of the channel found, NULL if it isn't found
+*/
 Channel	*Server::searchNameChannel(std::string name) {
 	if (_listChannels.empty())
 		return NULL;
@@ -40,12 +42,22 @@ Channel	*Server::searchNameChannel(std::string name) {
 	return (NULL);
 }
 
+/**
+ * Send a string to a client.
+ *
+ * @param str the string to send
+ * @param clientFD the fd of the target client
+*/
 void	Server::dispLogs(std::string str, int clientFD) {
-	// std::string tmp = "[IRC] ";
-	// tmp += str;
 	send(clientFD, str.c_str(), str.length(), 0);
 }
 
+/**
+ * Check if the string has forbidden characters (listed below)
+ *
+ * @param s the string to parse
+ * @return whether the string is valid or not
+*/
 bool	checkCharacters(std::string s) {
 	std::string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
 

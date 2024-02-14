@@ -6,7 +6,7 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:53:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 17:32:38 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/14 17:15:32 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	Server::mode_k(bool newmode, Client &client, std::vector<std::string> cmd, 
 void	Server::mode_o(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel) {
 	if (cmd.size() < 4)
 		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
-	std::vector<std::pair<Client *, bool> >::iterator clienttmp = channel->second->findMember(client);
+	std::vector<std::pair<Client *, bool> >::iterator clienttmp = channel->second->findMember(client.getNickname());
 	if (clienttmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
 	channel->second->opClient(clienttmp->first, newmode);
@@ -81,7 +81,7 @@ void	Server::mode(Client &client, std::vector<std::string> cmd) {
 		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	if (channel == this->_listChannels.end())
 		return (dispLogs(ERR_NOSUCHCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
-	std::vector<std::pair<Client *, bool> >::iterator clientmp = channel->second->findMember(client);
+	std::vector<std::pair<Client *, bool> >::iterator clientmp = channel->second->findMember(client.getNickname());
 	if (clientmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
 	if (cmd.size() == 2)

@@ -6,22 +6,22 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:50:06 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 11:33:47 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/14 17:10:27 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/ft_irc.hpp"
 
 void	Server::invite(Client &client, std::vector<std::string> cmd) {
+	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[2]);
 
 	if (cmd.size() < 3)
 		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	if (cmd.size() > 3)
 		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
-	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[2]);
 	if (channel == this->_listChannels.end())
 		return (dispLogs(ERR_NOSUCHCHANNEL(client.getNickname(), cmd[2]), client.getSocket()));
-	std::vector<std::pair<Client *, bool> >::iterator operatortmp = channel->second->findMember(client);
+	std::vector<std::pair<Client *, bool> >::iterator operatortmp = channel->second->findMember(client.getNickname());
 	if (operatortmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), channel->second->getName()), client.getSocket()));
 	if (!operatortmp->second)
@@ -35,9 +35,10 @@ void	Server::invite(Client &client, std::vector<std::string> cmd) {
 				break;
 			it++;
 		}
-		if (it == clientTmp->getListInvitation().end())
+		if (it != clientTmp->getListInvitation().end())
 			return (dispLogs(ERR_ALREADYINVITED(client.getNickname(), cmd[2]), client.getSocket()));
 		clientTmp->setInvitation(cmd[2]);
+		std::cout << "oui en effet j'ai effectue une invitation" << std::endl;
 		dispLogs(RPL_INVITERCVR(client.getNickname(), cmd[1], cmd[2]), clientTmp->getSocket());
 		return (dispLogs(RPL_INVITESNDR(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 	}

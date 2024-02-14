@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 15:28:49 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 14:24:25 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/14 17:11:57 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	Server::topic(Client &client, std::vector<std::string> cmd) {
 	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[1]);
 	if (channel == this->_listChannels.end())
 		return (dispLogs(ERR_NOSUCHCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
-	std::vector<std::pair<Client *, bool> >::iterator operatortmp = channel->second->findMember(client);
+	std::vector<std::pair<Client *, bool> >::iterator operatortmp = channel->second->findMember(client.getNickname());
 	if (operatortmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
 	if (!operatortmp->second)

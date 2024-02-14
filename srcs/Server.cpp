@@ -226,9 +226,9 @@ void	Server::handleRequest(Client &client, std::string request)
 /**
  * Close the socket of the client
  * 
- * Remove his sockert from epoll
- * 
- * Remove the client from all the channel he join
+ * Remove their socket from epoll
+ * Remove the client from all the channel they joined
+ * @param client the client to remove
 */
 void Server::removeClient(Client &client) {
 	close(client.getSocket());

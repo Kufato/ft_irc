@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 17:20:38 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/14 17:27:42 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,22 @@ std::string		concatString(std::vector<std::string> cmd);
 
 // Defines
 #define ERR_NOTINRANGE(client)							(": " + client + " :Your not in the authorized range\r\n")
-#define ERR_NORECIPIENT(client)							(": 411 " + client + " :No recipient given PRIVMSG\r\n")
+// #define ERR_NORECIPIENT(client)							(": 411 " + client + " :No recipient given PRIVMSG\r\n")
 #define ERR_CMDNOTFOUND(client)							(": 421 " + client + " :Command not found\r\n")
 #define ERR_UNKNOWNMODE(client)							(": 472 " + client + " :Is unknown mode char to me\r\n")
 #define ERR_NOTEXTTOSEND(client)						(": 412 " + client + " :No text to send\r\n")
 #define ERR_SAMENICKNAME(client)						(": " + client + " :There is already your nickname\r\n")
-#define ERR_NOTREGISTERED(client)						(": 451 " + client + " :You have not registered\r\n")
+// #define ERR_NOTREGISTERED(client)						(": 451 " + client + " :You have not registered\r\n")
 #define ERR_BADCHAR(client, name)						(": " + client + " " + name + " :Error you have used forbidden characters\r\n")
 #define ERR_PASSWDMISMATCH(client)						(": 464 " + client + " :Password incorrect\r\n")
 #define ERR_NOSUCHNICK(client, nick)					(": 401 " + client + " " + nick + " :No such nickname\r\n")
-#define ERR_UMODEUNKNOWNFLAG(client)					(": 501 " + client + " :Unknown MODE flag\r\n")
+// #define ERR_UMODEUNKNOWNFLAG(client)					(": 501 " + client + " :Unknown MODE flag\r\n")
 #define ERR_PASSCREATECHANNEL(client)					(": " + client +  " :Channel dont need password at creation\r\n")
 #define ERR_ALREADYREGISTERED(client)					(": 462 " + client + " :You may not reregister\r\n")
 #define ERR_AUTOKICK(client, channel)					(": " + client + " " + channel + " :Cannot kick yourself\r\n")
 #define ERR_ALREADYIN(client, channel)					(": " + client + " " + channel + " :Your are already in the channel\r\n")
 #define ERR_TOOMUCHPARAMS(client, cmd)					(": " + client + " " + cmd + " :Too much parameters\r\n")
-#define	ERR_UNKNOWNCOMMAND(client, cmd)					(": " + client + " " + cmd + " :")
+// #define	ERR_UNKNOWNCOMMAND(client, cmd)					(": " + client + " " + cmd + " :")
 #define ERR_NICKNAMEINUSE(client, nick)					(": 433 " + client + " " + nick + " :Nickname is already in use\r\n")
 #define ERR_NEEDMOREPARAMS(client, cmd)					(": 461 " + client + " " + cmd + " :Not enough parameters\r\n")
 #define ERR_NOTONCHANNEL(client, channel)				(": 442 " + client + " " + channel + " :Not on that channel\r\n")
@@ -63,9 +63,9 @@ std::string		concatString(std::vector<std::string> cmd);
 #define ERR_BADCHARCHANNEL(client, channel)				(": " + client + " " + channel + " :Channel's name must start with '#'\r\n")
 #define ERR_INVITEONLYCHAN(client, channel)				(": 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
 #define ERR_CHANOPRIVSNEEDED(client, channel)			(": 482 " + client + " " + channel + " :You're not channel operator\r\n")
-#define ERR_CANNOTSENDTOCHAN(client, channel)			(": 404 " + client + " " + channel + " :Cannot send to channel\r\n")
-#define ERR_USERONCHANNEL(client, nick, channel)		(": 303 " + client + " " + nick + " " + channel + " :is already on channel\r\n")
-#define ERR_USERNOTINCHANNEL(client, nick, channel)		(": 441 " + client + " " + nick + " " + channel + " :They aren't on that channel\r\n")
+// #define ERR_CANNOTSENDTOCHAN(client, channel)			(": 404 " + client + " " + channel + " :Cannot send to channel\r\n")
+// #define ERR_USERONCHANNEL(client, nick, channel)		(": 303 " + client + " " + nick + " " + channel + " :is already on channel\r\n")
+// #define ERR_USERNOTINCHANNEL(client, nick, channel)		(": 441 " + client + " " + nick + " " + channel + " :They aren't on that channel\r\n")
 
 //PRIVMSG BUILDERS
 #define USER_MESSAGES(client, target, msg)				(":" + client + " PRIVMSG " + target + " :" +  msg + "\r\n")
@@ -74,16 +74,15 @@ std::string		concatString(std::vector<std::string> cmd);
 //SERVER REPLIES
 #define RPL_WELCOME(client)								(": 001 " + client + " :Welcome in the IRC world, " + client + "\r\n")
 #define RPL_JOIN(nick, channel)							(":" + nick + " JOIN " + channel + "\r\n")
-#define RPL_PART(client, channel)						(":" + client + " PART " + channel + "\r\n")
-#define RPL_NICK(oldNick, newNick)						(":" + oldNick + " NICK " + newNick + "\r\n")
+// #define RPL_PART(client, channel)						(":" + client + " PART " + channel + "\r\n")
+// #define RPL_NICK(oldNick, newNick)						(":" + oldNick + " NICK " + newNick + "\r\n")
 #define RPL_NOTOPIC(client, channel)					(": 331 " + client + " " + channel + " :No topic is set\r\n")
 #define RPL_TOPIC(client, channel, topic)				(": 332 " + client + " TOPIC " + channel + " :" + topic + "\r\n")
-#define RPL_KICK(client, channel, target)				(":" + client + " KICK " + channel + " " + target + "\r\n")
-#define RPL_MODE(client, channel, mode, name)			(":" + client + " MODE " + channel + " " + mode + " " + name + "\r\n")
+// #define RPL_MODE(client, channel, mode, name)			(":" + client + " MODE " + channel + " " + mode + " " + name + "\r\n")
 #define RPL_CHANNELMODEIS(client, channel, mode)		(": 324 " + client + " " + channel + " " + mode + "\r\n")
 #define RPL_INVITERCVR(client, invitee, channel)		(":" + client + " INVITE " + invitee + " " + channel + "\r\n")
 #define RPL_INVITESNDR(client, invitee, channel)		(": 341 " + client + " " + invitee + " " + channel + "\r\n")
-#define RPL_KICKREASON(client, channel, target, reason)	(":" + client + " KICK " + channel + " " + target + " :" + reason + "\r\n")
+#define RPL_KICK(client, channel, target, reason)		(":" + client + " KICK " + channel + " " + target + " :" + reason + "\r\n")
 
 #define RPL_HELP	"Here is the list of all available commands :\r\n \
 					PASS : use it when you need to log and enter the password\r\n \
