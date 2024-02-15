@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:01:33 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/14 17:03:26 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:55:26 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ class	Server {
 		void						handleClient(int clientSocket);
 		void						handleRequest(Client &client, std::string request);
 		std::vector<std::string>	splitRequest(std::string request);
+		void						deleteEmptyChannels(void);
+		void						showChannels(void);
 	
 	// Commands
 		void		help(Client &client);

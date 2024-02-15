@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/14 17:27:42 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/15 15:42:02 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ std::string		concatString(std::vector<std::string> cmd);
 // #define RPL_PART(client, channel)						(":" + client + " PART " + channel + "\r\n")
 // #define RPL_NICK(oldNick, newNick)						(":" + oldNick + " NICK " + newNick + "\r\n")
 #define RPL_NOTOPIC(client, channel)					(": 331 " + client + " " + channel + " :No topic is set\r\n")
-#define RPL_TOPIC(client, channel, topic)				(": 332 " + client + " TOPIC " + channel + " :" + topic + "\r\n")
+#define RPL_TOPIC(client, channel, topic)				(": 332 " + client + " " + channel + " :" + topic + "\r\n")
 // #define RPL_MODE(client, channel, mode, name)			(":" + client + " MODE " + channel + " " + mode + " " + name + "\r\n")
 #define RPL_CHANNELMODEIS(client, channel, mode)		(": 324 " + client + " " + channel + " " + mode + "\r\n")
 #define RPL_INVITERCVR(client, invitee, channel)		(":" + client + " INVITE " + invitee + " " + channel + "\r\n")

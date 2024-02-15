@@ -237,12 +237,42 @@ void Server::removeClient(Client &client) {
 		std::vector<std::pair<Client *, bool> > members = it->second->getMembers();
 		std::vector<std::pair<Client *, bool> >::iterator it2 = members.begin();
 		while (it2 != members.end()) {
-			if (it2->first->getNickname() == client.getNickname())
-				it2 = members.erase(it2);
+			if (it2->first->getNickname() == client.getNickname()) {
+				it2 = it->second->eraseClient(client.getNickname());
+				break ;
+			}
 			else
-				++it2;
+				it2++;
 		}
 	}
 	std::map<int, Client *>::iterator it = this->_listClients.find(client.getSocket());
 	this->_listClients.erase(it);
+	this->deleteEmptyChannels();
+}
+
+void	Server::deleteEmptyChannels(void)
+{
+	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end();)
+	{
+		if (it->second->getMembers().empty())
+		{
+			delete it->second;
+			std::map<std::string, Channel *>::iterator tmpit = it;
+			it++;
+			this->_listChannels.erase(tmpit);
+			continue ;
+		}
+		it++;
+	}
+}
+
+void	Server::showChannels(void)
+{
+	std::cout << "Names of all the current channels:" << std::endl;
+	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end(); it++)
+	{
+		std::cout << it->second->getName() << std::endl;
+		it->second->showMembers();
+	}
+	std::cout << std::endl;
 }

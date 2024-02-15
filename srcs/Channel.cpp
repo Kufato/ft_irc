@@ -51,9 +51,7 @@ std::string		Channel::namReplyMsg(Client client)
 void	Channel::sendToAll(std::string msg)
 {
 	for (std::vector<std::pair<Client *, bool> >::iterator it = _members.begin(); it != _members.end(); it++)
-	{
 		send(it->first->getSocket(), msg.c_str(), msg.length(), 0);
-	}
 }
 
 bool	Channel::memberPresent(Client client)
@@ -65,6 +63,20 @@ bool	Channel::memberPresent(Client client)
 			return (true);
 	}
 	return (false);
+}
+
+std::vector<std::pair<Client *, bool> >::iterator	Channel::eraseClient(std::string targetName) {
+	std::vector<std::pair<Client *, bool> >::iterator target = this->findMember(targetName);
+	if (target != this->_members.end())
+		return (this->_members.erase(target));
+	return (target);
+}
+
+void	Channel::showMembers(void)
+{
+	std::cout << "List of members of " << _name << ":" << std::endl;
+	for (std::vector<std::pair<Client *, bool> >::iterator it = _members.begin(); it != _members.end(); it++)
+		std::cout << it->first << std::endl;
 }
 
 // Getters
