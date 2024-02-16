@@ -6,7 +6,7 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:53:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/14 17:15:32 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/16 16:28:16 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	Server::mode_i(bool newmode, Client &client, std::vector<std::string> cmd, 
 	if (cmd.size() > 3)
 		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	channel->second->setInviteMode(newmode);
+	channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], ""));
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 }
 
@@ -23,6 +24,7 @@ void	Server::mode_t(bool newmode, Client &client, std::vector<std::string> cmd, 
 	if (cmd.size() > 3)
 		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	channel->second->setRestictMode(newmode);
+	channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], ""));
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 }
 
@@ -31,6 +33,7 @@ void	Server::mode_k(bool newmode, Client &client, std::vector<std::string> cmd, 
 		if (cmd.size() > 3)
 			return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 		channel->second->setPassword(NULL);
+		channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], ""));
 	}
 	else {
 		if (cmd.size() < 4)
@@ -38,6 +41,8 @@ void	Server::mode_k(bool newmode, Client &client, std::vector<std::string> cmd, 
 		if (!checkCharacters(cmd[3]))
 			return (dispLogs(ERR_BADCHAR(client.getNickname(), cmd[3]), client.getSocket()));
 		channel->second->setPassword(cmd[3]);
+		channel->second->sendToAllOp(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], cmd[3]));
+		channel->second->sendToAllNonOp(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], "*REDACTED*"));
 	}
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 }
@@ -45,10 +50,12 @@ void	Server::mode_k(bool newmode, Client &client, std::vector<std::string> cmd, 
 void	Server::mode_o(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel) {
 	if (cmd.size() < 4)
 		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
-	std::vector<std::pair<Client *, bool> >::iterator clienttmp = channel->second->findMember(client.getNickname());
+	std::vector<std::pair<Client *, bool> >::iterator clienttmp = channel->second->findMember(cmd[3]);
 	if (clienttmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
+	std::cout << "Should op " << clienttmp->first->getNickname() << std::endl;
 	channel->second->opClient(clienttmp->first, newmode);
+	channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], cmd[3]));
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 }
 
@@ -57,6 +64,7 @@ void	Server::mode_l(bool newmode, Client &client, std::vector<std::string> cmd, 
 		if (cmd.size() > 3)
 			return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 		channel->second->setClientLimit(0);
+		channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], ""));
 	}
 	else {
 		if (cmd.size() < 4)
@@ -65,6 +73,7 @@ void	Server::mode_l(bool newmode, Client &client, std::vector<std::string> cmd, 
 		if (limit < 1 || limit > 10	)
 			return (dispLogs(ERR_NOTINRANGE(client.getNickname()), client.getSocket()));
 		channel->second->setClientLimit(limit);
+		channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], cmd[3]));
 	}
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:44:11 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/14 13:33:02 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:20:57 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void Server::privmsg(Client &client, std::vector<std::string> cmd) {
 			if (!searchNameChannel(cmd[i]))
 				return (dispLogs(ERR_NOSUCHCHANNEL(client.getNickname(), cmd[i]), client.getSocket()));
 			Channel channelTmp = *this->_listChannels.find(cmd[i])->second;
+			if (channelTmp.isTopicRestricted() && !channelTmp.memberPresent(client))
+				return (dispLogs(ERR_CANNOTSENDTOCHAN(client.getNickname(), channelTmp.getName()), client.getSocket()));
 			std::vector<std::pair<Client *, bool> > clientsTmp = channelTmp.getMembers();
 			for (std::vector<std::pair<Client *, bool> >::iterator it = clientsTmp.begin(); it != clientsTmp.end(); it++) {
 				if (client.getNickname() != it->first->getNickname()) {

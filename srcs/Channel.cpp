@@ -54,6 +54,22 @@ void	Channel::sendToAll(std::string msg)
 		send(it->first->getSocket(), msg.c_str(), msg.length(), 0);
 }
 
+void	Channel::sendToAllOp(std::string msg)
+{
+	for (std::vector<std::pair<Client *, bool> >::iterator it = _members.begin(); it != _members.end(); it++) {
+		if (it->second)
+			send(it->first->getSocket(), msg.c_str(), msg.length(), 0);
+	}
+}
+
+void	Channel::sendToAllNonOp(std::string msg)
+{
+	for (std::vector<std::pair<Client *, bool> >::iterator it = _members.begin(); it != _members.end(); it++) {
+		if (!it->second)
+			send(it->first->getSocket(), msg.c_str(), msg.length(), 0);
+	}
+}
+
 bool	Channel::memberPresent(Client client)
 {
 	std::vector<std::pair<Client *, bool> >::iterator it;

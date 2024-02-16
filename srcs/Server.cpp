@@ -116,8 +116,8 @@ void	Server::handleNewClient(void) {
 	if (epoll_ctl(this->_epollFd, EPOLL_CTL_ADD, clientFd, &this->_event))
 		throw std::logic_error("Couldn't add the new client");
 	this->_listClients.insert(std::pair<int, Client *>(clientFd, new Client(clientFd)));
-	std::cout << "Connection establish'ed sheeran" << std::endl;
-	send(clientFd, "Please enter the server's password using : PASS <password>\r\n", 59, 0);
+	std::cout << "Connection established" << std::endl;
+	// send(clientFd, "Please enter the server's password using : PASS <password>\r\n", 59, 0);
 	return ;
 }
 

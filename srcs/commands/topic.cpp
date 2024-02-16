@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 15:28:49 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/15 15:23:05 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/16 14:58:29 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	Server::topic(Client &client, std::vector<std::string> cmd) {
 	if (cmd.size() == 2) {
 		if (channel->second->getTopic() == "")
 			return (channel->second->sendToAll(RPL_NOTOPIC(client.getNickname(), cmd[1])));
-		return (channel->second->sendToAll(RPL_TOPIC(client.getNickname(), cmd[1], cmd[2])));
+		return (channel->second->sendToAll(RPL_TOPIC(client.getNickname(), cmd[1], channel->second->getTopic())));
 	}
 	channel->second->setTopic(cmd[2]);
 	return (channel->second->sendToAll(RPL_TOPIC(client.getNickname(), cmd[1], cmd[2])));
