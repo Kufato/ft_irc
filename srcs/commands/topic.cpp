@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 15:28:49 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/16 14:58:29 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/19 15:18:47 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	Server::topic(Client &client, std::vector<std::string> cmd) {
 	std::vector<std::pair<Client *, bool> >::iterator operatortmp = channel->second->findMember(client.getNickname());
 	if (operatortmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
-	if (!operatortmp->second)
+	if (channel->second->isTopicRestricted() == true && !operatortmp->second)
 		return (dispLogs(ERR_CHANOPRIVSNEEDED(client.getNickname(), cmd[1]), client.getSocket()));
 	if (cmd.size() == 2) {
 		if (channel->second->getTopic() == "")
@@ -32,5 +32,5 @@ void	Server::topic(Client &client, std::vector<std::string> cmd) {
 		return (channel->second->sendToAll(RPL_TOPIC(client.getNickname(), cmd[1], channel->second->getTopic())));
 	}
 	channel->second->setTopic(cmd[2]);
-	return (channel->second->sendToAll(RPL_TOPIC(client.getNickname(), cmd[1], cmd[2])));
+	return (channel->second->sendToAll(RPL_TOPIC(client.getNickname(), cmd[1], channel->second->getTopic())));
 }

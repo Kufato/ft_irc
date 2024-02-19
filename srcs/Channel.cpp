@@ -96,6 +96,12 @@ void	Channel::showMembers(void)
 }
 
 // Getters
+std::string	Channel::getTopic() {
+	if (this->_topic != "")
+		return _topic.substr(1, _topic.length() - 1);
+	return ("");
+}
+
 int			Channel::getClientLimit() { return _clientLimit; }
 
 bool		Channel::isInviteOnly() { return _inviteOnly; }
@@ -104,7 +110,6 @@ bool		Channel::isTopicRestricted() { return _restrictTopic; }
 
 std::string	Channel::getName() { return _name; }
 
-std::string	Channel::getTopic() { return _topic; }
 
 std::string	Channel::getPassword() { return _password; }
 

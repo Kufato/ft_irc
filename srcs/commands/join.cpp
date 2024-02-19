@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:09:30 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/16 15:35:55 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/19 15:22:07 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/ft_irc.hpp"
 
 void	Server::join(Client &client, std::vector<std::string> cmd) {
-
-
 	if (cmd.size() < 2)
 		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	if (cmd.size() > 3)
@@ -61,5 +59,7 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 	std::cout << channel->second->getMembers()[0].first->getNickname() << std::endl;
 	dispLogs(RPL_JOIN(client.getNickname(), cmd[1]), client.getSocket());
 	channel->second->sendToAll(channel->second->namReplyMsg(client));
+	if (channel->second->getTopic() != "")
+		dispLogs(RPL_TOPIC(client.getNickname(), cmd[1], channel->second->getTopic()), client.getSocket());
 	// return (channel->second->sendToAll(": 366 " + channel->second->getName() + " :End of /NAMES list\r\n"));
 }

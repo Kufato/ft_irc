@@ -47,6 +47,13 @@ Server::~Server(void) {
  * Add server socket to epoll instance
 */
 void	Server::createServer() {
+	int	opt = 1;
+
+	if (setsockopt(this->_serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
+		std::perror("Bind");
+		close (this->_serverSocket);
+		throw std::logic_error("Error with setsockopt.");
+	}
 	if (bind(this->_serverSocket, (struct sockaddr*)&this->_serverAddr, sizeof(this->_serverAddr))) {
 		std::perror("Bind");
 		close (this->_serverSocket);
@@ -142,24 +149,23 @@ void	Server::handleClient(int clientSocket) {
 	strBuff += buff;
 	while (strBuff.find_first_not_of("\n\r") != std::string::npos)
 	{
-	size_t end = strBuff.find_first_of("\n\r");
-	if (end != std::string::npos) {
-		if (bytesRead <= 0) {
-			if (!bytesRead)
-				removeClient(*client);  
-			else
-				std::cerr << "Error receiving data from client." << std::endl;
+		size_t end = strBuff.find_first_of("\n\r");
+		if (end != std::string::npos) {
+			if (bytesRead <= 0) {
+				if (!bytesRead)
+					removeClient(*client);  
+				else
+					std::cerr << "Error receiving data from client." << std::endl;
+			}
+			request = strBuff.substr(0, end);
+			strBuff = strBuff.substr(end + 1, strBuff.length() - request.length());
+			std::cout << "Received : " << request << std::endl;
+			std::cout << "Rest : " << strBuff << std::endl;
+			client->setSocket(clientSocket);
+			this->handleRequest(*client, request);
+			// if (msg != "")
+			// 	send(clientSocket, msg.c_str(), msg.length(), 0);
 		}
-		request = strBuff.substr(0, end);
-		strBuff = strBuff.substr(end + 1, strBuff.length() - request.length());
-		std::cout << "Received : " << request << std::endl;
-		std::cout << "Rest : " << strBuff << std::endl;
-		client->setSocket(clientSocket);
-		this->handleRequest(*client, request);
-		// if (msg != "")
-		// 	send(clientSocket, msg.c_str(), msg.length(), 0);
-	}
-
 	}
 }
 
