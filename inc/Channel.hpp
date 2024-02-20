@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:03:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/20 15:42:32 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:58:01 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class	Channel {
 		std::string								_name;
 		std::string								_topic;
 		std::string								_password;
-		
+		std::vector<std::pair<Client *, bool> > _members;
 
 	public:
 		Channel(std::string name);

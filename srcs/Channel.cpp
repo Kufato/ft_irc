@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 10:53:42 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/20 15:38:21 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:59:14 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ std::string	Channel::getPassword() { return _password; }
 
 std::vector<std::pair<Client *, bool> >	&Channel::getMembers() { return _members; }
 
-int	Channel::getNbOperator() { for (std::vector<std::pair<Client *, bool>::iterator it = _members.begin(), int i = 0; it != _members.end(); it++, i++) }
+// int	Channel::getNbOperator() { for (std::vector<std::pair<Client *, bool> >::iterator it = _members.begin(), int i = 0; it != _members.end(); it++, i++) }
 
 // Setters
 void	Channel::setName(std::string name) { _name = name; }
