@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:53:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/16 16:28:16 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/20 15:43:13 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/ft_irc.hpp"
 
-void	Server::mode_i(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel) {
+void	Server::mode_i(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
 	if (cmd.size() > 3)
 		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	channel->second->setInviteMode(newmode);
@@ -20,7 +20,7 @@ void	Server::mode_i(bool newmode, Client &client, std::vector<std::string> cmd, 
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 }
 
-void	Server::mode_t(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel) {
+void	Server::mode_t(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
 	if (cmd.size() > 3)
 		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	channel->second->setRestictMode(newmode);
@@ -28,7 +28,7 @@ void	Server::mode_t(bool newmode, Client &client, std::vector<std::string> cmd, 
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 }
 
-void	Server::mode_k(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel) {
+void	Server::mode_k(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
 	if (!newmode) {
 		if (cmd.size() > 3)
 			return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
@@ -47,19 +47,22 @@ void	Server::mode_k(bool newmode, Client &client, std::vector<std::string> cmd, 
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 }
 
-void	Server::mode_o(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel) {
+void	Server::mode_o(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
 	if (cmd.size() < 4)
 		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	std::vector<std::pair<Client *, bool> >::iterator clienttmp = channel->second->findMember(cmd[3]);
 	if (clienttmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
+	if (clienttmp->first->getNickname() == client.getNickname() && clienttmp->second && channel->second->getNbOperator())
+		return (dispLogs(""))
 	std::cout << "Should op " << clienttmp->first->getNickname() << std::endl;
 	channel->second->opClient(clienttmp->first, newmode);
 	channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], cmd[3]));
+	channel->second->sendToAll(channel->second->namReplyMsg(client));
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 }
 
-void	Server::mode_l(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel) {
+void	Server::mode_l(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
 	if (!newmode) {
 		if (cmd.size() > 3)
 			return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
@@ -78,9 +81,6 @@ void	Server::mode_l(bool newmode, Client &client, std::vector<std::string> cmd, 
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 }
 
-/**
- * Oh god please send help
-*/
 void	Server::mode(Client &client, std::vector<std::string> cmd) {
 	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[1]);
 

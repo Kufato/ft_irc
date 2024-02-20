@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 11:21:42 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/15 13:27:09 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:27:46 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,4 @@ void	Server::kick(Client &client, std::vector<std::string> cmd) {
 	dispLogs(channel->second->namReplyMsg(client), socketTarget);
 	channel->second->sendToAll(channel->second->namReplyMsg(client));
 	return ;
-} 
+}

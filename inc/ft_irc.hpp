@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/19 15:03:12 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:47:04 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ std::string		concatString(std::vector<std::string> cmd);
 #define ERR_INVITEONLYCHAN(client, channel)				(": 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
 #define ERR_CHANOPRIVSNEEDED(client, channel)			(": 482 " + client + " " + channel + " :You're not channel operator\r\n")
 #define ERR_CANNOTSENDTOCHAN(client, channel)			(": 404 " + client + " " + channel + " :Channel is restricted (+t)\r\n")
+#define ERR_CANTDESERT(client, channel)					(": " + client + " " + channel + " :You can't desert (try Op'ing another member)\r\n")
 // #define ERR_USERONCHANNEL(client, nick, channel)		(": 303 " + client + " " + nick + " " + channel + " :is already on channel\r\n")
 // #define ERR_USERNOTINCHANNEL(client, nick, channel)		(": 441 " + client + " " + nick + " " + channel + " :They aren't on that channel\r\n")
 

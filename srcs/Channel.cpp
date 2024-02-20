@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Channel.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/20 10:53:42 by axcallet          #+#    #+#             */
+/*   Updated: 2024/02/20 15:38:21 by axcallet         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/Channel.hpp"
 
 Channel::Channel(std::string name) : _clientLimit(10), _inviteOnly(false), _restrictTopic(false), _name(name), _topic(""), _password("")
@@ -27,9 +39,9 @@ std::vector<std::pair<Client *, bool> >::iterator	Channel::findMember(std::strin
 	for (it = _members.begin(); it != _members.end(); it++)
 	{
 		if (it->first->getNickname() == nickname)
-			break ;
+			return it;
 	}
-	return (it);
+	return it;
 }
 
 std::string		Channel::namReplyMsg(Client client)
@@ -113,7 +125,9 @@ std::string	Channel::getName() { return _name; }
 
 std::string	Channel::getPassword() { return _password; }
 
-std::vector<std::pair<Client *, bool> >	Channel::getMembers() { return _members; }
+std::vector<std::pair<Client *, bool> >	&Channel::getMembers() { return _members; }
+
+int	Channel::getNbOperator() { for (std::vector<std::pair<Client *, bool>::iterator it = _members.begin(), int i = 0; it != _members.end(); it++, i++) }
 
 // Setters
 void	Channel::setName(std::string name) { _name = name; }

@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:50:06 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/14 17:10:27 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:24:12 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	Server::invite(Client &client, std::vector<std::string> cmd) {
 	std::vector<std::pair<Client *, bool> >::iterator operatortmp = channel->second->findMember(client.getNickname());
 	if (operatortmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), channel->second->getName()), client.getSocket()));
-	if (!operatortmp->second)
+	if (channel->second->isInviteOnly() == true && !operatortmp->second)
 		return (dispLogs(ERR_CHANOPRIVSNEEDED(client.getNickname(), cmd[2]), client.getSocket()));
 	Client *clientTmp = searchNameClient(cmd[1]);
 	if (clientTmp) {
@@ -38,7 +38,7 @@ void	Server::invite(Client &client, std::vector<std::string> cmd) {
 		if (it != clientTmp->getListInvitation().end())
 			return (dispLogs(ERR_ALREADYINVITED(client.getNickname(), cmd[2]), client.getSocket()));
 		clientTmp->setInvitation(cmd[2]);
-		std::cout << "oui en effet j'ai effectue une invitation" << std::endl;
+		// std::cout << "oui en effet j'ai effectue une invitation" << std::endl;
 		dispLogs(RPL_INVITERCVR(client.getNickname(), cmd[1], cmd[2]), clientTmp->getSocket());
 		return (dispLogs(RPL_INVITESNDR(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 	}

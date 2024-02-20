@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:03:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/16 16:16:13 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/20 15:42:32 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class	Channel {
 		std::string								_name;
 		std::string								_topic;
 		std::string								_password;
-		std::vector<std::pair<Client *, bool> > _members;
+		
 
 	public:
 		Channel(std::string name);
@@ -49,7 +49,8 @@ class	Channel {
 		std::string								getName();
 		std::string								getTopic();
 		std::string								getPassword();
-		std::vector<std::pair<Client *, bool> >	getMembers();
+		std::vector<std::pair<Client *, bool> >	&getMembers();
+		int										getNbOperator();
 
 		// Setters
 		void	setName(std::string name);
