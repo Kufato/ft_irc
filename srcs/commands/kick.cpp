@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 11:21:42 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/20 15:27:46 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/20 17:29:02 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ void	Server::kick(Client &client, std::vector<std::string> cmd) {
 	std::vector<std::pair<Client *, bool> >::iterator target = channel->second->findMember(cmd[2]);
 	if (target == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
-	dispLogs(RPL_KICK(client.getNickname(), channel->second->getName(), target->first->getNickname(), cmd[3]), target->first->getSocket());
+	if (cmd.size() == 4)
+		dispLogs(RPL_KICK(client.getNickname(), channel->second->getName(), target->first->getNickname(), cmd[3]), target->first->getSocket());
+	else
+		dispLogs(RPL_KICK(client.getNickname(), channel->second->getName(), target->first->getNickname(), ""), target->first->getSocket());
 	int	socketTarget = target->first->getSocket();
 	channel->second->eraseClient(target->first->getNickname());
 	dispLogs(channel->second->namReplyMsg(client), socketTarget);

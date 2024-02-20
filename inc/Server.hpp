@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:01:33 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/20 14:40:48 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:06:55 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class	Server {
 		void						lauchServer(void);
 		void						createServer(void);
 		void						handleNewClient(void);
-		void						removeClient(Client &client);
+		void						removeClient(Client *client);
 		void						handleClient(int clientSocket);
 		void						handleRequest(Client &client, std::string request);
 		std::vector<std::string>	splitRequest(std::string request);

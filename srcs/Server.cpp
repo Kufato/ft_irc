@@ -124,7 +124,7 @@ void	Server::handleNewClient(void) {
 		throw std::logic_error("Couldn't add the new client");
 	this->_listClients.insert(std::pair<int, Client *>(clientFd, new Client(clientFd)));
 	std::cout << "Connection established" << std::endl;
-	send(clientFd, "Please enter the server's password using : PASS <password>\r\n", 59, 0);
+	send(clientFd, "Please enter the server's password using : PASS <password>\r\n", 60, 0);
 	return ;
 }
 
@@ -146,25 +146,23 @@ void	Server::handleClient(int clientSocket) {
 	
 	memset(&buff, 0, sizeof(buff));
 	bytesRead = recv(clientSocket, buff, sizeof(buff), 0);
+	if (bytesRead <= 0) {
+		if (!bytesRead)
+			removeClient(client);  
+		else
+			std::cerr << "Error receiving data from client." << std::endl;
+	}
 	strBuff += buff;
 	while (strBuff.find_first_not_of("\n\r") != std::string::npos)
 	{
 		size_t end = strBuff.find_first_of("\n\r");
 		if (end != std::string::npos) {
-			if (bytesRead <= 0) {
-				if (!bytesRead)
-					removeClient(*client);  
-				else
-					std::cerr << "Error receiving data from client." << std::endl;
-			}
 			request = strBuff.substr(0, end);
 			strBuff = strBuff.substr(end + 1, strBuff.length() - request.length());
 			std::cout << "Received : " << request << std::endl;
 			std::cout << "Rest : " << strBuff << std::endl;
 			client->setSocket(clientSocket);
 			this->handleRequest(*client, request);
-			// if (msg != "")
-			// 	send(clientSocket, msg.c_str(), msg.length(), 0);
 		}
 	}
 }
@@ -188,15 +186,15 @@ void	Server::handleRequest(Client &client, std::string request)
 			std::cout << "\"" << cmd[i] << "\"" << " ";
 	}
 	std::cout << std::endl;
-	std::string commands[12] = {"PASS", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP", "QUIT", "WHO"};
+	std::string commands[12] = {"PASS", "QUIT", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP", "WHO"};
 	int i;
 	for (i = 0; i < 12; i++) {
 		if (cmd[0] == commands[i]) {
-			std::cout << "Found command " << commands[i] << std::endl;
+			std::cout << "Found command " << i << " " << commands[i] << std::endl;
 			break;
 		}
 	}
-	if (i && !client.isLogged())
+	if (i > 1 && !client.isLogged())
 		return (dispLogs(": register by using the command PASS <password>\r\n", client.getSocket()));
 	if (i > 2 && !client.isRegistered())
 		return (dispLogs(": log in by using NICK <nicname> and USER <username>\r\n", client.getSocket()));
@@ -204,25 +202,25 @@ void	Server::handleRequest(Client &client, std::string request)
 		case 0:
 			return (this->pass(client, cmd));
 		case 1:
-			return (this->nick(client, cmd));
+			return (this->removeClient(&client)); 
 		case 2:
-			return (this->user(client, cmd));
+			return (this->nick(client, cmd));
 		case 3:
-			return (this->kick(client, cmd));
+			return (this->user(client, cmd));
 		case 4:
-			return (this->invite(client, cmd));
+			return (this->kick(client, cmd));
 		case 5:
-			return (this->topic(client, cmd));
+			return (this->invite(client, cmd));
 		case 6:
-			return (this->mode(client, cmd));
+			return (this->topic(client, cmd));
 		case 7:
-			return (this->privmsg(client, cmd));
+			return (this->mode(client, cmd));
 		case 8:
-			return (this->join(client, cmd));
+			return (this->privmsg(client, cmd));
 		case 9:
-			return (this->help(client));
+			return (this->join(client, cmd));
 		case 10:
-			removeClient(client); 
+			return (this->help(client));
 		case 11:
 			return ;
 	}
@@ -236,23 +234,24 @@ void	Server::handleRequest(Client &client, std::string request)
  * Remove the client from all the channel they joined
  * @param client the client to remove
 */
-void Server::removeClient(Client &client) {
-	close(client.getSocket());
-	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, client.getSocket(), NULL);
+void Server::removeClient(Client *client) {
+	close(client->getSocket());
+	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, client->getSocket(), NULL);
 	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end(); it++) {
 		std::vector<std::pair<Client *, bool> > members = it->second->getMembers();
 		std::vector<std::pair<Client *, bool> >::iterator it2 = members.begin();
 		while (it2 != members.end()) {
-			if (it2->first->getNickname() == client.getNickname()) {
-				it2 = it->second->eraseClient(client.getNickname());
+			if (it2->first->getNickname() == client->getNickname()) {
+				it2 = it->second->eraseClient(client->getNickname());
 				break ;
 			}
 			else
 				it2++;
 		}
 	}
-	std::map<int, Client *>::iterator it = this->_listClients.find(client.getSocket());
+	std::map<int, Client *>::iterator it = this->_listClients.find(client->getSocket());
 	this->_listClients.erase(it);
+	delete client;
 	this->deleteEmptyChannels();
 }
 

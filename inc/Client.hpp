@@ -6,7 +6,7 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:00:09 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/07 17:47:22 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/20 17:43:28 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ class	Client {
 
 		bool		isRegistered(void) { return (this->_registered); }
 
-		std::vector<std::string>	getListInvitation(void) { return (this->_listInvitations); }
+		std::vector<std::string>	&getListInvitation(void) { return (this->_listInvitations); }
 
 	// Setters
 		void	setUsername(std::string username){ this->_username = username; }

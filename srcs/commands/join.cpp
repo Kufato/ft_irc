@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:09:30 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/19 15:22:07 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/20 17:56:09 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,29 +34,36 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 	std::vector<std::pair<Client *, bool> > listMembers = channel->second->getMembers();
 	if (channel->second->memberPresent(client))
 		return (dispLogs(ERR_ALREADYIN(client.getNickname(), cmd[1]), client.getSocket()));
-	std::vector<std::string> listInvitations = client.getListInvitation();
+	std::vector<std::string> &listInvitations = client.getListInvitation();
 	std::vector<std::string>::iterator it = listInvitations.begin();
 	if (channel->second->isInviteOnly() == true) {
 		while (it != listInvitations.end()) {
 			if (it->c_str() == cmd[1])
+			{
+				std::cout << it->c_str() << std::endl;
 				break;
+			}
 			it++;
 		}
-		if (it == client.getListInvitation().end())
+		if (it == listInvitations.end())
 			return (dispLogs(ERR_INVITEONLYCHAN(client.getNickname(), cmd[1]), client.getSocket()));
 	}
 	if (channel->second->getPassword() != "") {
-		if (cmd[2] != channel->second->getPassword() || cmd.size() != 3)
+		if (cmd.size() != 3 || cmd[2] != channel->second->getPassword())
 			return (dispLogs(ERR_BADCHANNELKEY(client.getNickname(), cmd[1]), client.getSocket()));
 	}
 	if (channel->second->getMembers().size() != 0) {
 		if (channel->second->getClientLimit() && (int)channel->second->getMembers().size() >= channel->second->getClientLimit())
 			return (dispLogs(ERR_CHANNELISFULL(client.getNickname(), cmd[1]), client.getSocket()));
 	}
-	if (it != client.getListInvitation().end())
+	if (it != listInvitations.end())
+	{
+		std::cout << "am a erase da invitation" << std::endl;
 		listInvitations.erase(it);
+		if (listInvitations.begin() != listInvitations.end())
+			std::cout << "1st invite : " << listInvitations.begin()->c_str() << std::endl;
+	}
 	channel->second->addClient(&client);
-	std::cout << channel->second->getMembers()[0].first->getNickname() << std::endl;
 	dispLogs(RPL_JOIN(client.getNickname(), cmd[1]), client.getSocket());
 	channel->second->sendToAll(channel->second->namReplyMsg(client));
 	if (channel->second->getTopic() != "")
