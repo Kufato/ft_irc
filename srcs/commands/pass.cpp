@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 13:54:00 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/13 17:47:36 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/21 18:15:52 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,8 @@ void	Server::pass(Client &client, std::vector<std::string> cmd)
 	if (cmd.size() > 2)
 		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	if (this->_password == cmd[1]) {
-		std::cout << "registered!" << std::endl;
 		client.setLogged(true);
-		// return (dispLogs(RPL_PASSACCEPTED, client.getSocket(), NULL));
+		return (dispLogs(": you may enter the 'NICK <nickname>' and 'USER <username>' commands", client.getSocket()));
 	}
 	else
 		return (dispLogs(ERR_PASSWDMISMATCH(client.getNickname()), client.getSocket()));

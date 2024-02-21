@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/20 15:47:04 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/21 18:21:25 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+gbretgbert  5gbert #pragma once
 
 #include <map>
 #include <vector>
@@ -34,22 +34,23 @@
 void			newSignal(int signum);
 bool			checkCharacters(std::string s);
 std::string		concatString(std::vector<std::string> cmd);
+bool			checkFormat(std::vector<std::string> cmd, Client client, int u, int o);
 
 // Defines
-#define ERR_NOTINRANGE(client)							(": " + client + " :Your not in the authorized range\r\n")
+#define ERR_NOTINRANGE(client)							(": " + client + " :You're not in the authorized range\r\n")
 // #define ERR_NORECIPIENT(client)							(": 411 " + client + " :No recipient given PRIVMSG\r\n")
 #define ERR_CMDNOTFOUND(client)							(": 421 " + client + " :Command not found\r\n")
-#define ERR_UNKNOWNMODE(client)							(": 472 " + client + " :Is unknown mode char to me\r\n")
+#define ERR_UNKNOWNMODE(client)							(": 472 " + client + " :Is unknown mode char\r\n")
 #define ERR_NOTEXTTOSEND(client)						(": 412 " + client + " :No text to send\r\n")
 #define ERR_SAMENICKNAME(client)						(": " + client + " :There is already your nickname\r\n")
 // #define ERR_NOTREGISTERED(client)						(": 451 " + client + " :You have not registered\r\n")
 #define ERR_BADCHAR(client, name)						(": " + client + " " + name + " :Error you have used forbidden characters\r\n")
-#define ERR_PASSWDMISMATCH(client)						(": 464 " + client + " :Password incorrect\r\n")
+#define ERR_PASSWDMISMATCH(client)						(": 464 " + client + " :Incorrect password\r\n")
 #define ERR_NOSUCHNICK(client, nick)					(": 401 " + client + " " + nick + " :No such nickname\r\n")
 // #define ERR_UMODEUNKNOWNFLAG(client)					(": 501 " + client + " :Unknown MODE flag\r\n")
-#define ERR_PASSCREATECHANNEL(client)					(": " + client +  " :Channel dont need password at creation\r\n")
+#define ERR_PASSCREATECHANNEL(client)					(": " + client +  " :Channel don't need password at creation\r\n")
 #define ERR_ALREADYREGISTERED(client)					(": 462 " + client + " :You may not reregister\r\n")
-#define ERR_AUTOKICK(client, channel)					(": " + client + " " + channel + " :Cannot kick yourself\r\n")
+#define ERR_AUTOKICK(client, channel)					(": " + client + " " + channel + " :Can't kick yourself\r\n")
 #define ERR_ALREADYIN(client, channel)					(": " + client + " " + channel + " :Your are already in the channel\r\n")
 #define ERR_TOOMUCHPARAMS(client, cmd)					(": " + client + " " + cmd + " :Too much parameters\r\n")
 // #define	ERR_UNKNOWNCOMMAND(client, cmd)					(": " + client + " " + cmd + " :")
@@ -63,7 +64,7 @@ std::string		concatString(std::vector<std::string> cmd);
 #define ERR_ERRONUSEUSERNAME(client, user)				(": " + client + " " + user + " :Erroneus username\r\n")
 #define ERR_ALREADYINVITED(client, channel)				(": " + client + " " + channel + " :This user is already invite\r\n")
 #define ERR_BADCHARCHANNEL(client, channel)				(": " + client + " " + channel + " :Channel's name must start with '#'\r\n")
-#define ERR_INVITEONLYCHAN(client, channel)				(": 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
+#define ERR_INVITEONLYCHAN(client, channel)				(": 473 " + client + " " + channel + " :Can't join channel (+i)\r\n")
 #define ERR_CHANOPRIVSNEEDED(client, channel)			(": 482 " + client + " " + channel + " :You're not channel operator\r\n")
 #define ERR_CANNOTSENDTOCHAN(client, channel)			(": 404 " + client + " " + channel + " :Channel is restricted (+t)\r\n")
 #define ERR_CANTDESERT(client, channel)					(": " + client + " " + channel + " :You can't desert (try Op'ing another member)\r\n")

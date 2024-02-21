@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:53:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/20 15:59:20 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/21 18:02:36 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,8 @@ void	Server::mode_o(bool newmode, Client &client, std::vector<std::string> cmd, 
 	std::vector<std::pair<Client *, bool> >::iterator clienttmp = channel->second->findMember(cmd[3]);
 	if (clienttmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
-	// if (clienttmp->first->getNickname() == client.getNickname() && clienttmp->second && channel->second->getNbOperator())
-	// 	return (dispLogs(""))
-	std::cout << "Should op " << clienttmp->first->getNickname() << std::endl;
+	if (clienttmp->first->getNickname() == client.getNickname() && clienttmp->second && channel->second->getNbOperator())
+		return (dispLogs(ERR_CANTDESERT(client.getNickname(), channel->second->getName()), client.getSocket()));
 	channel->second->opClient(clienttmp->first, newmode);
 	channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], cmd[3]));
 	channel->second->sendToAll(channel->second->namReplyMsg(client));

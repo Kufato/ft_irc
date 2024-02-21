@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:09:30 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/20 17:56:09 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/21 18:06:00 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 	if (channel->second->isInviteOnly() == true) {
 		while (it != listInvitations.end()) {
 			if (it->c_str() == cmd[1])
-			{
-				std::cout << it->c_str() << std::endl;
 				break;
-			}
 			it++;
 		}
 		if (it == listInvitations.end())
@@ -57,12 +54,7 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 			return (dispLogs(ERR_CHANNELISFULL(client.getNickname(), cmd[1]), client.getSocket()));
 	}
 	if (it != listInvitations.end())
-	{
-		std::cout << "am a erase da invitation" << std::endl;
 		listInvitations.erase(it);
-		if (listInvitations.begin() != listInvitations.end())
-			std::cout << "1st invite : " << listInvitations.begin()->c_str() << std::endl;
-	}
 	channel->second->addClient(&client);
 	dispLogs(RPL_JOIN(client.getNickname(), cmd[1]), client.getSocket());
 	channel->second->sendToAll(channel->second->namReplyMsg(client));

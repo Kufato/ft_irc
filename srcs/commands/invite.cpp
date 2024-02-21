@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:50:06 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/20 15:24:12 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/21 18:04:21 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	Server::invite(Client &client, std::vector<std::string> cmd) {
 		if (it != clientTmp->getListInvitation().end())
 			return (dispLogs(ERR_ALREADYINVITED(client.getNickname(), cmd[2]), client.getSocket()));
 		clientTmp->setInvitation(cmd[2]);
-		// std::cout << "oui en effet j'ai effectue une invitation" << std::endl;
 		dispLogs(RPL_INVITERCVR(client.getNickname(), cmd[1], cmd[2]), clientTmp->getSocket());
 		return (dispLogs(RPL_INVITESNDR(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 	}

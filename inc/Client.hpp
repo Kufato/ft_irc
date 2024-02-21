@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:00:09 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/20 17:43:28 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/21 14:25:02 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class	Client {
 	// Getters
 		std::string	getUsername(void) { return (this->_username); }
 
-		std::string getNickname(void) { return (this->_nickname); }
+		std::string	getNickname(void) { return (this->_nickname); }
 
 		int			getSocket(void) { return (this->_socket); }
 
@@ -49,7 +49,7 @@ class	Client {
 
 	// Setters
 		void	setUsername(std::string username){ this->_username = username; }
-		
+
 		void	setNickname(std::string nickname){ this->_nickname = nickname; }
 
 		void	setSocket(int socket){ this->_socket = socket; }

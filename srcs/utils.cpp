@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/14 17:03:32 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/21 18:23:28 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Channel.hpp"
+gbretgbert  9gbert gbretgbert  6gbert #include "../inc/Channel.hpp"
 
 /**
  * Search for a client using nickname
@@ -102,4 +102,16 @@ std::string		concatString(std::vector<std::string> cmd)
 	for (size_t i = 1; i < cmd.size(); i++)
 		s += " " + cmd[i];
 	return s;
+}
+
+bool	checkFormat(std::vector<std::string> cmd, Client client, int u, int o)
+{
+	if (cmd.size() < u)
+		dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket());
+		return true
+	else if (cmd.size() > o)
+		dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket());
+	else
+		return false;
+	return true;
 }

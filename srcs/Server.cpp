@@ -132,6 +132,8 @@ void	Server::handleNewClient(void) {
  * Read the data sent by a client.
  * 
  * The data can be received incorrectly, and the connection can be closed by the client.
+ * The loop prevents data reception from being interrupted and handle all the clients' 
+ * requests separated by newlines until there are no requests anymore.
  * 
  * @param clientSocket the socket of the client sending data.
 */
@@ -158,12 +160,14 @@ void	Server::handleClient(int clientSocket) {
 		size_t end = strBuff.find_first_of("\n\r");
 		if (end != std::string::npos) {
 			request = strBuff.substr(0, end);
-			strBuff = strBuff.substr(end + 1, strBuff.length() - request.length());
+			strBuff = strBuff.substr(end + 1, strBuff.length() - request.length()); 
 			std::cout << "Received : " << request << std::endl;
 			std::cout << "Rest : " << strBuff << std::endl;
 			client->setSocket(clientSocket);
 			this->handleRequest(*client, request);
 		}
+		else
+			break;
 	}
 }
 
@@ -189,14 +193,12 @@ void	Server::handleRequest(Client &client, std::string request)
 	std::string commands[12] = {"PASS", "QUIT", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP", "WHO"};
 	int i;
 	for (i = 0; i < 12; i++) {
-		if (cmd[0] == commands[i]) {
-			std::cout << "Found command " << i << " " << commands[i] << std::endl;
+		if (cmd[0] == commands[i])
 			break;
-		}
 	}
 	if (i > 1 && !client.isLogged())
 		return (dispLogs(": register by using the command PASS <password>\r\n", client.getSocket()));
-	if (i > 2 && !client.isRegistered())
+	if (i > 3 && !client.isRegistered())
 		return (dispLogs(": log in by using NICK <nicname> and USER <username>\r\n", client.getSocket()));
 	switch (i) {
 		case 0:
@@ -231,7 +233,8 @@ void	Server::handleRequest(Client &client, std::string request)
  * Close the socket of the client
  * 
  * Remove their socket from epoll
- * Remove the client from all the channel they joined
+ * Remove the client from the whole server
+ *
  * @param client the client to remove
 */
 void Server::removeClient(Client *client) {
@@ -255,6 +258,9 @@ void Server::removeClient(Client *client) {
 	this->deleteEmptyChannels();
 }
 
+/**
+ * Delete all the empty channels from the server
+*/
 void	Server::deleteEmptyChannels(void)
 {
 	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end();)
@@ -271,6 +277,9 @@ void	Server::deleteEmptyChannels(void)
 	}
 }
 
+/**
+ * Show the name of all the channels of the server and show all their members
+*/
 void	Server::showChannels(void)
 {
 	std::cout << "Names of all the current channels:" << std::endl;

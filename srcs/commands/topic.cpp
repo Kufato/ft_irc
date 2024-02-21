@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 15:28:49 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/20 15:24:49 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:37:05 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	Server::topic(Client &client, std::vector<std::string> cmd) {
 		return (dispLogs(ERR_CHANOPRIVSNEEDED(client.getNickname(), cmd[1]), client.getSocket()));
 	if (cmd.size() == 2) {
 		if (channel->second->getTopic() == "")
-			return (channel->second->sendToAll(RPL_NOTOPIC(client.getNickname(), cmd[1])));
-		return (channel->second->sendToAll(RPL_TOPIC(client.getNickname(), cmd[1], channel->second->getTopic())));
+			return (dispLogs(RPL_NOTOPIC(client.getNickname(), cmd[1]), client.getSocket()));
+		return (dispLogs(RPL_TOPIC(client.getNickname(), cmd[1], channel->second->getTopic()), client.getSocket()));
 	}
 	channel->second->setTopic(cmd[2]);
 	return (channel->second->sendToAll(RPL_TOPIC(client.getNickname(), cmd[1], channel->second->getTopic())));
