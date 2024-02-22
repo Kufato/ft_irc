@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:03:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/20 15:58:01 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:27:05 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,24 @@ class	Channel {
 		std::vector<std::pair<Client *, bool> > _members;
 
 	public:
+	// Constructor / Destructor
 		Channel(std::string name);
 		~Channel();
-		bool												memberPresent(Client client);
+
+	// Public methods
+		void												showMembers(void);
 		void												addClient(Client *client);
-		void												opClient(Client *client, bool mode);
 		void												sendToAll(std::string msg);
 		void												sendToAllOp(std::string msg);
+		bool												memberPresent(Client client);
 		void												sendToAllNonOp(std::string msg);
-		std::vector<std::pair<Client *, bool> >::iterator	eraseClient(std::string targetName);
+		void												opClient(Client *client, bool mode);
 		std::string											namReplyMsg(Client client);
 		std::vector<std::pair<Client *, bool> >::iterator	findMember(std::string nickname);
-		void												showMembers(void);
+		std::vector<std::pair<Client *, bool> >::iterator	eraseClient(std::string targetName);
 
-		// Getters
+	// Getters
+		int										getNbOperator();
 		int										getClientLimit();
 		bool									isInviteOnly();
 		bool									isTopicRestricted();
@@ -50,13 +54,12 @@ class	Channel {
 		std::string								getTopic();
 		std::string								getPassword();
 		std::vector<std::pair<Client *, bool> >	&getMembers();
-		int										getNbOperator();
 
-		// Setters
+	// Setters
+		void	setInviteMode(bool mode);
 		void	setName(std::string name);
+		void	setClientLimit(int limit);
+		void	setRestictMode(bool mode);
 		void	setTopic(std::string topic);
 		void	setPassword(std::string password);
-		void	setClientLimit(int limit);
-		void	setInviteMode(bool mode);
-		void	setRestictMode(bool mode);
 };

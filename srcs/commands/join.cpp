@@ -6,17 +6,15 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:09:30 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/21 18:06:00 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:39:49 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/ft_irc.hpp"
+#include "ft_irc.hpp"
 
 void	Server::join(Client &client, std::vector<std::string> cmd) {
-	if (cmd.size() < 2)
-		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
-	if (cmd.size() > 3)
-		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
+	if (checkFormat(cmd, client, 2, 3))
+		return ;
 	if (cmd[1][0] != '#')
 		return (dispLogs(ERR_BADCHARCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
 	if (!searchNameChannel(cmd[1])) {
@@ -60,5 +58,5 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 	channel->second->sendToAll(channel->second->namReplyMsg(client));
 	if (channel->second->getTopic() != "")
 		dispLogs(RPL_TOPIC(client.getNickname(), cmd[1], channel->second->getTopic()), client.getSocket());
-	// return (channel->second->sendToAll(": 366 " + channel->second->getName() + " :End of /NAMES list\r\n"));
+	return 
 }

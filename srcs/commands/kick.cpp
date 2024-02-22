@@ -3,22 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 11:21:42 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/20 17:29:02 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/02/22 14:40:18 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/ft_irc.hpp"
+#include "ft_irc.hpp"
 
 void	Server::kick(Client &client, std::vector<std::string> cmd) {
 	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[1]);
 
-	if (cmd.size() < 3)
-		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
-	if (cmd.size() > 4)
-		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
+	if (checkFormat(cmd, client, 3, 4))
+		return ;
 	if (client.getNickname() == cmd[2])
 		return (dispLogs(ERR_AUTOKICK(client.getNickname(), cmd[1]), client.getSocket()));
 	if (channel == this->_listChannels.end())

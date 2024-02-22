@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:53:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/21 18:02:36 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:41:09 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/ft_irc.hpp"
+#include "../../ift_irc.hpp"
 
 void	Server::mode_i(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
 	if (cmd.size() > 3)
@@ -83,10 +83,8 @@ void	Server::mode_l(bool newmode, Client &client, std::vector<std::string> cmd, 
 void	Server::mode(Client &client, std::vector<std::string> cmd) {
 	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[1]);
 
-	if (cmd.size() < 2)
-		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
-	if (cmd.size() > 4)
-		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
+	if (checkFormat(cmd, client, 2, 4))
+		return ;
 	if (channel == this->_listChannels.end())
 		return (dispLogs(ERR_NOSUCHCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
 	std::vector<std::pair<Client *, bool> >::iterator clientmp = channel->second->findMember(client.getNickname());

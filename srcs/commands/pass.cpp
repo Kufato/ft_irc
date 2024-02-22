@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 13:54:00 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/21 18:15:52 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:42:47 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/ft_irc.hpp"
+#include "ft_irc.hpp"
 
 /**
  * Tries to log the client using the password they provided.
@@ -23,10 +23,8 @@ void	Server::pass(Client &client, std::vector<std::string> cmd)
 {
 	if (client.isRegistered())
 		return (dispLogs(ERR_ALREADYREGISTERED(client.getNickname()), client.getSocket()));
-	if (cmd.size() < 2)
-		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
-	if (cmd.size() > 2)
-		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
+	if (checkFormat(cmd, client, 2, 2))
+		return ;
 	if (this->_password == cmd[1]) {
 		client.setLogged(true);
 		return (dispLogs(": you may enter the 'NICK <nickname>' and 'USER <username>' commands", client.getSocket()));

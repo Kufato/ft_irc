@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/21 18:23:28 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/22 15:05:09 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,12 @@ std::vector<std::string>	Server::splitRequest(std::string request)
 	return (res);
 }
 
+/**
+ * Concatenate all the strings of a vector, putting spaces between elements
+ *
+ * @param cmd the vector to concatenate
+ * @return the resulting string
+*/
 std::string		concatString(std::vector<std::string> cmd)
 {
 	if (cmd.empty())
@@ -104,13 +110,21 @@ std::string		concatString(std::vector<std::string> cmd)
 	return s;
 }
 
-bool	checkFormat(std::vector<std::string> cmd, Client client, int u, int o)
+/**
+ * Check if the number of arguments is within the u and o range. If not, send
+ * ERR_NEEDMOREPARAMS or ERR_TOOMUCHPARAMS to the client sending the command
+ *
+ * @param cmd the command to check
+ * @param client the client sending the command
+ * @param l the lower bound
+ * @param u the upper bound
+*/
+bool	checkFormat(std::vector<std::string> cmd, Client client, int l, int u)
 {
-	if (cmd.size() < u)
+	if (cmd.size() < l)
 		dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket());
-		return true
-	else if (cmd.size() > o)
-		dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket());
+	else if (cmd.size() > u)
+		dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket());
 	else
 		return false;
 	return true;
