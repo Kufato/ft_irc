@@ -251,6 +251,7 @@ void Server::removeClient(Client *client) {
 			else
 				it2++;
 		}
+		it->second->sendToAll(RPL_PART(client->getNickname(), it->second->getName()));
 	}
 	std::map<int, Client *>::iterator it = this->_listClients.find(client->getSocket());
 	this->_listClients.erase(it);

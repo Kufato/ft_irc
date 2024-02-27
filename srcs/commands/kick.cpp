@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 11:21:42 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/27 14:15:43 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:54:26 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,6 @@ void	Server::kick(Client &client, std::vector<std::string> cmd) {
 	int	socketTarget = target->first->getSocket();
 	channel->second->eraseClient(target->first->getNickname());
 	dispLogs(channel->second->namReplyMsg(client), socketTarget);
-	channel->second->sendToAll(channel->second->namReplyMsg(client));
+	channel->second->sendToAll(RPL_PART(cmd[2], cmd[1]));
 	return ;
 }

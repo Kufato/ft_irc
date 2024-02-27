@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/27 14:13:02 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:48:39 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ std::string		concatString(std::vector<std::string> cmd);
 //SERVER REPLIES
 #define RPL_WELCOME(client)								(": 001 " + client + " :Welcome in the IRC world, " + client + "\r\n")
 #define RPL_JOIN(nick, channel)							(":" + nick + " JOIN " + channel + "\r\n")
+#define RPL_PART(client, channel)						(":" + client + " PART " + channel + "\r\n")
 #define RPL_NOTOPIC(client, channel)					(": 331 " + client + " " + channel + " :No topic is set\r\n")
 #define RPL_TOPIC(client, channel, topic)				(": 332 " + client + " " + channel + " :" + topic + "\r\n")
 #define RPL_MODE(client, channel, mode, name)			(":" + client + " MODE " + channel + " " + mode + " " + name + "\r\n")
