@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Channel.hpp"
+#include "../inc/Server.hpp"
 
 // Constructor/Destructor
 Server::Server(int port, std::string password) {

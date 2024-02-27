@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 13:54:00 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/22 14:42:47 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:15:52 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
+#include "../../inc/ft_irc.hpp"
 
 /**
  * Tries to log the client using the password they provided.

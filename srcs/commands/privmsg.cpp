@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:44:11 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/22 14:40:13 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:15:55 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
+#include "../../inc/ft_irc.hpp"
 
 void Server::privmsg(Client &client, std::vector<std::string> cmd) {
 	if (cmd.size() < 3 )

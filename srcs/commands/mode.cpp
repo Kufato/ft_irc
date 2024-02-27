@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:53:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/22 14:41:09 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:15:46 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../ift_irc.hpp"
+#include "../../inc/ft_irc.hpp"
 
 void	Server::mode_i(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
 	if (cmd.size() > 3)

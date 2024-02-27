@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 15:26:40 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/22 14:42:35 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:15:49 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
+#include "../../inc/ft_irc.hpp"
 
 void Server::nick(Client &client, std::vector<std::string> cmd) {
 	if (checkFormat(cmd, client, 2, 2))

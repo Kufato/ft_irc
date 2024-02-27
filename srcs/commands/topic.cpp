@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 15:28:49 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/22 14:43:18 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:15:59 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
+#include "../../inc/ft_irc.hpp"
 
 void	Server::topic(Client &client, std::vector<std::string> cmd) {
 	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[1]);

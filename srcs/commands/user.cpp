@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 15:26:40 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/22 14:43:32 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:16:03 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
+#include "../../inc/ft_irc.hpp"
 
 void Server::user(Client &client, std::vector<std::string> cmd) {
 	if (client.isRegistered() == true)

@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/22 15:05:20 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:13:02 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 // Functions
 void			newSignal(int signum);
 bool			checkCharacters(std::string s);
+void			dispLogs(std::string str, int clientFD);
 bool			checkFormat(std::vector<std::string> cmd, Client client, int l, int u);
 std::string		concatString(std::vector<std::string> cmd);
 

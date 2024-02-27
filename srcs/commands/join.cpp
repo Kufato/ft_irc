@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:09:30 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/22 14:39:49 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:16:18 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
+#include "../../inc/ft_irc.hpp"
 
 void	Server::join(Client &client, std::vector<std::string> cmd) {
 	if (checkFormat(cmd, client, 2, 3))
@@ -58,5 +58,5 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 	channel->second->sendToAll(channel->second->namReplyMsg(client));
 	if (channel->second->getTopic() != "")
 		dispLogs(RPL_TOPIC(client.getNickname(), cmd[1], channel->second->getTopic()), client.getSocket());
-	return 
+	return ;
 }

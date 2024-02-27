@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:26:45 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/22 15:07:09 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:15:30 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
+#include "../../inc/ft_irc.hpp"
 
 /**
  * Send RPL_HELP to a client

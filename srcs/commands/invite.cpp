@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:50:06 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/22 16:01:29 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:15:34 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
+#include "../../inc/ft_irc.hpp"
 
 /**
  * Add an invitation in the invitation list of the client specified in cmd

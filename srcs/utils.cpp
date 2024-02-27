@@ -6,11 +6,11 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/22 15:05:09 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:14:51 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-gbretgbert  9gbert gbretgbert  6gbert #include "../inc/Channel.hpp"
+#include "../inc/ft_irc.hpp"
 
 /**
  * Search for a client using nickname
@@ -48,7 +48,7 @@ Channel	*Server::searchNameChannel(std::string name) {
  * @param str the string to send
  * @param clientFD the fd of the target client
 */
-void	Server::dispLogs(std::string str, int clientFD) {
+void	dispLogs(std::string str, int clientFD) {
 	send(clientFD, str.c_str(), str.length(), 0);
 }
 
@@ -121,9 +121,9 @@ std::string		concatString(std::vector<std::string> cmd)
 */
 bool	checkFormat(std::vector<std::string> cmd, Client client, int l, int u)
 {
-	if (cmd.size() < l)
+	if ((int)cmd.size() < l)
 		dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket());
-	else if (cmd.size() > u)
+	else if ((int)cmd.size() > u)
 		dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket());
 	else
 		return false;
