@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:50:06 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/27 14:15:34 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/29 15:03:05 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	Server::invite(Client &client, std::vector<std::string> cmd) {
 		return (dispLogs(ERR_CHANOPRIVSNEEDED(client.getNickname(), cmd[2]), client.getSocket()));
 	Client *clientTmp = searchNameClient(cmd[1]);
 	if (clientTmp) {
-		std::vector<std::string> invitationsTmp = clientTmp->getListInvitation();
+		std::vector<std::string> &invitationsTmp = clientTmp->getListInvitation();
 		std::vector<std::string>::iterator it = invitationsTmp.begin();
-		while (it != clientTmp->getListInvitation().end()) {
+		while (it != invitationsTmp.end()) {
 			if (it->c_str() == cmd[2])
 				break;
 			it++;

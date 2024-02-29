@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:09:30 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/27 14:16:18 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/29 14:42:23 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,11 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 			return (dispLogs(ERR_CHANNELISFULL(client.getNickname(), cmd[1]), client.getSocket()));
 	}
 	if (it != listInvitations.end())
+	{
+		std::cout << "Erasing " << client.getNickname() << "'s invitation to " << channel->second->getName() << " [" << client.getListInvitation().size() << "]" << std::endl;
 		listInvitations.erase(it);
+		std::cout << "Erased ! [" << client.getListInvitation().size() << "]";
+	}
 	channel->second->addClient(&client);
 	dispLogs(RPL_JOIN(client.getNickname(), cmd[1]), client.getSocket());
 	channel->second->sendToAll(channel->second->namReplyMsg(client));

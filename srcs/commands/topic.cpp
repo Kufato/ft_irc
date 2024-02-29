@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 15:28:49 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/27 14:15:59 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/02/29 15:04:52 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	Server::topic(Client &client, std::vector<std::string> cmd) {
 	std::vector<std::pair<Client *, bool> >::iterator operatortmp = channel->second->findMember(client.getNickname());
 	if (operatortmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
-	if (channel->second->isTopicRestricted() == true && !operatortmp->second)
+	if (channel->second->isTopicRestricted() == true && !operatortmp->second && cmd.size() == 3)
 		return (dispLogs(ERR_CHANOPRIVSNEEDED(client.getNickname(), cmd[1]), client.getSocket()));
 	if (cmd.size() == 2) {
 		if (channel->second->getTopic() == "")
