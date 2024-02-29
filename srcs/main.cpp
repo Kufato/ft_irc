@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:04:34 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/27 19:49:56 by ajoliet          ###   ########.fr       */
+/*   Updated: 2024/02/29 14:16:08 by ajoliet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ int main (int argc, char **argv) {
 	if (tmp.find_first_not_of("0123456789") != std::string::npos)
 	{
 		std::cout << "the port must have only numeric characters" << std::endl;
+		return (1);
+	}
+	tmp = argv[2];
+	if (tmp.find_first_not_of("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_") != std::string::npos)
+	{
+		std::cout << "invalid character(s) in password" << std::endl;
 		return (1);
 	}
 	try {
