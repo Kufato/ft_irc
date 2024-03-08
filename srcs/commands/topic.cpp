@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 15:28:49 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/29 15:04:52 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/08 13:50:24 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/ft_irc.hpp"
 
 void	Server::topic(Client &client, std::vector<std::string> cmd) {
-	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[1]);
-
 	if (checkFormat(cmd, client, 2, 3))
 		return ;
+	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[1]);
 	if (channel == this->_listChannels.end())
 		return (dispLogs(ERR_NOSUCHCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
 	std::vector<std::pair<Client *, bool> >::iterator operatortmp = channel->second->findMember(client.getNickname());

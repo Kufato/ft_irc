@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:50:06 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/29 15:03:05 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/08 13:49:14 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,9 @@
  * @param cmd the full invite command
 */
 void	Server::invite(Client &client, std::vector<std::string> cmd) {
-	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[2]);
-
 	if (checkFormat(cmd, client, 3, 3))
 		return ;
+	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[2]);
 	if (channel == this->_listChannels.end())
 		return (dispLogs(ERR_NOSUCHCHANNEL(client.getNickname(), cmd[2]), client.getSocket()));
 	std::vector<std::pair<Client *, bool> >::iterator operatortmp = channel->second->findMember(client.getNickname());
