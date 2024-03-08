@@ -6,7 +6,7 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:53:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/08 13:49:42 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/03/08 14:07:37 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	Server::mode_o(bool newmode, Client &client, std::vector<std::string> cmd, 
 	std::vector<std::pair<Client *, bool> >::iterator clienttmp = channel->second->findMember(cmd[3]);
 	if (clienttmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
-	if (clienttmp->first->getNickname() == client.getNickname() && clienttmp->second && channel->second->getNbOperator())
+	if (clienttmp->first->getNickname() == client.getNickname() && clienttmp->second && channel->second->getNbOperator() && !newmode)
 		return (dispLogs(ERR_CANTDESERT(client.getNickname(), channel->second->getName()), client.getSocket()));
 	channel->second->opClient(clienttmp->first, newmode);
 	channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], cmd[3]));

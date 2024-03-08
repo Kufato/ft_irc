@@ -6,7 +6,7 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 13:54:00 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/27 14:24:07 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/03/08 13:55:55 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	Server::pass(Client &client, std::vector<std::string> cmd)
 		return ;
 	if (this->_password == cmd[1]) {
 		client.setLogged(true);
-		return (dispLogs(": you may enter the 'NICK <nickname>' and 'USER <username>' commands\r\n", client.getSocket()));
+		return (dispLogs("You may enter the 'NICK <nickname>' and 'USER <username>' commands\r\n", client.getSocket()));
 	}
 	else
 		return (dispLogs(ERR_PASSWDMISMATCH(client.getNickname()), client.getSocket()));
