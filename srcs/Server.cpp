@@ -16,6 +16,7 @@
 Server::Server(int port, std::string password) {
 	this->_port = port;
 	this->_password = password;
+	this->_bot = false;
 	this->_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	this->_epollFd = 0;
 	if (this->_serverSocket == -1)
@@ -28,6 +29,8 @@ Server::Server(int port, std::string password) {
 Server::~Server(void) {
 	if (this->_epollFd)
 		close (this->_epollFd);
+	if (this->_bot)
+		close (this->_botSocket);
 	close (this->_serverSocket);
 	for (std::map<int, Client *>::iterator it = this->_listClients.begin(); it != this->_listClients.end(); it++) {
 		close(it->second->getSocket());
@@ -151,8 +154,8 @@ void	Server::handleClient(int clientSocket) {
 	if (bytesRead <= 0) {
 		if (!bytesRead)
 			removeClient(client);  
-		else
-			std::cerr << "Error receiving data from client." << std::endl;
+		// else
+		// 	std::cerr << "Error receiving data from client. " << clientSocket << " " << _serverSocket << std::endl;
 	}
 	strBuff += buff;
 	while (strBuff.find_first_not_of("\n\r") != std::string::npos)
@@ -190,7 +193,7 @@ void	Server::handleRequest(Client &client, std::string request)
 			std::cout << "\"" << cmd[i] << "\"" << " ";
 	}
 	std::cout << std::endl;
-	std::string commands[12] = {"PASS", "QUIT", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP", "WHO"};
+	std::string commands[13] = {"PASS", "QUIT", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP", "WHO", "BOT"};
 	int i;
 	for (i = 0; i < 12; i++) {
 		if (cmd[0] == commands[i])
@@ -225,6 +228,8 @@ void	Server::handleRequest(Client &client, std::string request)
 			return (this->help(client));
 		case 11:
 			return ;
+		case 12:
+			return (this->bot(client));
 	}
 	return (dispLogs(ERR_CMDNOTFOUND(client.getNickname()), client.getSocket()));
 }

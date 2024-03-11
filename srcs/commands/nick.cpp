@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 15:26:40 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/27 14:15:49 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/11 17:08:19 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void Server::nick(Client &client, std::vector<std::string> cmd) {
 	if (checkFormat(cmd, client, 2, 2))
 		return ;
+	if (cmd[1] == "bot")
+		return (dispLogs(ERR_BOTNICK(client.getNickname()), client.getSocket()));
 	if (client.getNickname() == cmd[1])
 		return (dispLogs(ERR_SAMENICKNAME(client.getNickname()), client.getSocket()));
 	if (!checkCharacters(cmd[1]))

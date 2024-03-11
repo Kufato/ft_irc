@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 14:44:11 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/08 14:19:54 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/03/11 16:51:33 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void Server::privmsg(Client &client, std::vector<std::string> cmd) {
 				continue;
 			}
 			Channel channelTmp = *this->_listChannels.find(cmd[i])->second;
-			if (channelTmp.isTopicRestricted() && !channelTmp.memberPresent(client)) {
+			if (!channelTmp.memberPresent(client)) {
 				dispLogs(ERR_CANNOTSENDTOCHAN(client.getNickname(), channelTmp.getName()), client.getSocket());
 				continue;
 			}
@@ -40,8 +40,10 @@ void Server::privmsg(Client &client, std::vector<std::string> cmd) {
 			Client *receiver = searchNameClient(cmd[i]);
 			if (!receiver)
 				dispLogs(ERR_NOSUCHNICK(client.getNickname(), cmd[i]), client.getSocket());
-			else
+			else if (receiver->getNickname() != "bot")
 				dispLogs(USER_MESSAGES(client.getNickname(), receiver->getNickname(), cmd[cmd.size() - 1]), receiver->getSocket());
+			else
+				this->bot_msg(client, *receiver, cmd);
 		}
 	}
 }

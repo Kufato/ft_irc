@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:50:06 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/08 13:49:14 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/03/11 17:06:20 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 void	Server::invite(Client &client, std::vector<std::string> cmd) {
 	if (checkFormat(cmd, client, 3, 3))
 		return ;
+	if (cmd[1] == "bot" && this->_bot)
+		return (dispLogs(ERR_BOTINVITE(client.getNickname()), client.getSocket()));
 	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[2]);
 	if (channel == this->_listChannels.end())
 		return (dispLogs(ERR_NOSUCHCHANNEL(client.getNickname(), cmd[2]), client.getSocket()));

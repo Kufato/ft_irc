@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 13:54:00 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/08 13:55:55 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/03/11 11:33:02 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,5 @@ void	Server::pass(Client &client, std::vector<std::string> cmd)
 	}
 	else
 		return (dispLogs(ERR_PASSWDMISMATCH(client.getNickname()), client.getSocket()));
+	std::cout << "Connexion au serveur IRC réussie !" << std::endl;	
 }

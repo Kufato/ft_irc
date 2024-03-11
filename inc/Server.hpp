@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:01:33 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/27 14:12:50 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/11 16:50:22 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ class	Server {
 		int									_port;
 		int									_epollFd;
 		int									_serverSocket;
+		int									_botSocket;
+		bool								_bot;
 		epoll_event							_event;
 		std::string							_password;
 		sockaddr_in							_serverAddr;
@@ -46,6 +48,7 @@ class	Server {
 		std::vector<std::string>	splitRequest(std::string request);
 	
 	// Commands
+		void	bot(Client &client);
 		void	help(Client &client);
 		void	nick(Client &client, std::vector<std::string> cmd);
 		void	user(Client &client, std::vector<std::string> cmd);
@@ -56,6 +59,7 @@ class	Server {
 		void	topic(Client &client, std::vector<std::string> cmd);
 		void	invite(Client &client, std::vector<std::string> cmd);
 		void	privmsg(Client &client, std::vector<std::string> cmd);
+		void	bot_msg(Client &client, Client &bot, std::vector<std::string> cmd);
 		void	mode_i(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 		void	mode_t(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 		void	mode_k(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);

@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 10:53:42 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/27 14:08:42 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/11 10:17:09 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,23 @@ std::vector<std::pair<Client *, bool> >::iterator	Channel::findMember(std::strin
 }
 
 /**
+ * Search for a client in the channel and indicate if they are a member
+ *
+ * @param client the client to search
+ * @return true if the client is a member of the channel, false if they are not
+*/
+bool	Channel::memberPresent(Client client)
+{
+	std::vector<std::pair<Client *, bool> >::iterator it;
+	for (it = _members.begin(); it != _members.end(); it++)
+	{
+		if (it->first->getNickname() == client.getNickname())
+			return (true);
+	}
+	return (false);
+}
+
+/**
  * Send a RPL_NAMREPLY to the client given, containing the list
  * of all the members of a channel and their grade (@ for operators,
  * + for regular members)
@@ -128,23 +145,6 @@ void	Channel::sendToAllNonOp(std::string msg)
 		if (!it->second)
 			send(it->first->getSocket(), msg.c_str(), msg.length(), 0);
 	}
-}
-
-/**
- * Search for a client in the channel and indicate if they are a member
- *
- * @param client the client to search
- * @return true if the client is a member of the channel, false if they are not
-*/
-bool	Channel::memberPresent(Client client)
-{
-	std::vector<std::pair<Client *, bool> >::iterator it;
-	for (it = _members.begin(); it != _members.end(); it++)
-	{
-		if (it->first->getNickname() == client.getNickname())
-			return (true);
-	}
-	return (false);
 }
 
 /**

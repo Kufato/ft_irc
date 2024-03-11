@@ -6,7 +6,7 @@
 #    By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 11:26:17 by axcallet          #+#    #+#              #
-#    Updated: 2024/02/09 17:22:22 by axcallet         ###   ########.fr        #
+#    Updated: 2024/03/11 15:02:03 by axcallet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,18 +23,19 @@ OBJ_DIR		= obj
 OBJ			= $(SRC:.cpp=.o)
 SRC			= ./srcs/Channel.cpp			\
 			./srcs/Client.cpp				\
-			./srcs/main.cpp				\
+			./srcs/main.cpp					\
 			./srcs/Server.cpp				\
 			./srcs/utils.cpp				\
 			./srcs/signals.cpp				\
+			./srcs/bot/bot.cpp				\
 			./srcs/commands/help.cpp		\
-			./srcs/commands/invite.cpp	\
+			./srcs/commands/invite.cpp		\
 			./srcs/commands/join.cpp		\
 			./srcs/commands/kick.cpp		\
 			./srcs/commands/mode.cpp		\
 			./srcs/commands/nick.cpp		\
 			./srcs/commands/pass.cpp		\
-			./srcs/commands/privmsg.cpp	\
+			./srcs/commands/privmsg.cpp		\
 			./srcs/commands/topic.cpp		\
 			./srcs/commands/user.cpp
 
