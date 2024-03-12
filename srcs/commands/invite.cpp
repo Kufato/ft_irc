@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:50:06 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/11 17:06:20 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/11 17:59:29 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ void	Server::invite(Client &client, std::vector<std::string> cmd) {
 		dispLogs(RPL_INVITERCVR(client.getNickname(), cmd[1], cmd[2]), clientTmp->getSocket());
 		return (dispLogs(RPL_INVITESNDR(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
 	}
-	return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[2]), client.getSocket()));
-	
+	else
+		return (dispLogs(ERR_NOSUCHNICK(client.getNickname(), cmd[1]), client.getSocket()));
 }

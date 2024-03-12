@@ -195,7 +195,7 @@ void	Server::handleRequest(Client &client, std::string request)
 	std::cout << std::endl;
 	std::string commands[13] = {"PASS", "QUIT", "NICK", "USER", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "JOIN", "HELP", "WHO", "BOT"};
 	int i;
-	for (i = 0; i < 12; i++) {
+	for (i = 0; i < 13; i++) {
 		if (cmd[0] == commands[i])
 			break;
 	}

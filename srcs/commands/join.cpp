@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:09:30 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/29 14:42:23 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/11 18:15:06 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 		newChannel->opClient(&client, true);
 		dispLogs(RPL_JOIN(client.getNickname(), cmd[1]), client.getSocket());
 		return newChannel->sendToAll(newChannel->namReplyMsg(client));
-		// return (newChannel->sendToAll(": 366 " + newChannel->getName() + " :End of /NAMES list\r\n"));
 	}
 	std::map<std::string, Channel *>::iterator	channel = this->_listChannels.find(cmd[1]);
 	std::vector<std::pair<Client *, bool> > listMembers = channel->second->getMembers();
