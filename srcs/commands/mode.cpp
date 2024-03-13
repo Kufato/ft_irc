@@ -6,33 +6,43 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:53:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/08 14:07:37 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/03/13 16:54:33 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/ft_irc.hpp"
+
+void	Server::mode_show(Client &client, Channel &channel) {
+	std::string modes = "+";
+	std::string values = "";
+	if (channel.isInviteOnly())
+		modes += "i";
+	if (channel.getPassword() != "") {
+		modes += "k";
+		values += " ";
+		values += channel.getPassword();
+	}
+	modes += "lo";
+	values += " ";
+	values += itoa(channel.getClientLimit());
+	if (channel.isTopicRestricted())
+		modes += "t";
+	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), channel.getName(), modes + values), client.getSocket()));
+}
 
 void	Server::mode_i(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
 	if (cmd.size() > 3)
 		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 	channel->second->setInviteMode(newmode);
 	channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], ""));
-	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
-}
-
-void	Server::mode_t(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
-	if (cmd.size() > 3)
-		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
-	channel->second->setRestictMode(newmode);
-	channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], ""));
-	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
+	return ;
 }
 
 void	Server::mode_k(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
 	if (!newmode) {
 		if (cmd.size() > 3)
 			return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
-		channel->second->setPassword(NULL);
+		channel->second->setPassword("");
 		channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], ""));
 	}
 	else {
@@ -44,21 +54,7 @@ void	Server::mode_k(bool newmode, Client &client, std::vector<std::string> cmd, 
 		channel->second->sendToAllOp(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], cmd[3]));
 		channel->second->sendToAllNonOp(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], "*REDACTED*"));
 	}
-	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
-}
-
-void	Server::mode_o(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
-	if (cmd.size() < 4)
-		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
-	std::vector<std::pair<Client *, bool> >::iterator clienttmp = channel->second->findMember(cmd[3]);
-	if (clienttmp == channel->second->getMembers().end())
-		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
-	if (clienttmp->first->getNickname() == client.getNickname() && clienttmp->second && channel->second->getNbOperator() && !newmode)
-		return (dispLogs(ERR_CANTDESERT(client.getNickname(), channel->second->getName()), client.getSocket()));
-	channel->second->opClient(clienttmp->first, newmode);
-	channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], cmd[3]));
-	channel->second->sendToAll(channel->second->namReplyMsg(client));
-	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
+	return ;
 }
 
 void	Server::mode_l(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
@@ -77,7 +73,29 @@ void	Server::mode_l(bool newmode, Client &client, std::vector<std::string> cmd, 
 		channel->second->setClientLimit(limit);
 		channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], cmd[3]));
 	}
-	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), cmd[1], cmd[2]), client.getSocket()));
+	return ;
+}
+
+void	Server::mode_o(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
+	if (cmd.size() < 4)
+		return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
+	std::vector<std::pair<Client *, bool> >::iterator clienttmp = channel->second->findMember(cmd[3]);
+	if (clienttmp == channel->second->getMembers().end())
+		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
+	if (clienttmp->first->getNickname() == client.getNickname() && clienttmp->second && channel->second->getNbOperator() && !newmode)
+		return (dispLogs(ERR_CANTDESERT(client.getNickname(), channel->second->getName()), client.getSocket()));
+	channel->second->opClient(clienttmp->first, newmode);
+	channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], cmd[3]));
+	channel->second->sendToAll(channel->second->namReplyMsg(client));
+	return ;
+}
+
+void	Server::mode_t(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator channel) {
+	if (cmd.size() > 3)
+		return (dispLogs(ERR_TOOMUCHPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
+	channel->second->setRestictMode(newmode);
+	channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], ""));
+	return ;
 }
 
 void	Server::mode(Client &client, std::vector<std::string> cmd) {
@@ -90,7 +108,7 @@ void	Server::mode(Client &client, std::vector<std::string> cmd) {
 	if (clientmp == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
 	if (cmd.size() == 2)
-		return ;
+		return (mode_show(client, *channel->second));
 	if (!clientmp->second)
 		return (dispLogs(ERR_CHANOPRIVSNEEDED(client.getNickname(), cmd[1]), client.getSocket()));
 	if ((cmd[2][0] != '+' && cmd[2][0] != '-') || cmd[2].length() != 2)
@@ -100,19 +118,20 @@ void	Server::mode(Client &client, std::vector<std::string> cmd) {
 		case 'i':
 			mode_i(newmode, client, cmd, channel);
 			break ;
-		case 't':
-			mode_t(newmode, client, cmd, channel);
-			break ;
 		case 'k':
 			mode_k(newmode, client, cmd, channel);
-			break ;
-		case 'o':
-			mode_o(newmode, client, cmd, channel);
 			break ;
 		case 'l':
 			mode_l(newmode, client, cmd, channel);
 			break ;
+		case 'o':
+			mode_o(newmode, client, cmd, channel);
+			break ;
+		case 't':
+			mode_t(newmode, client, cmd, channel);
+			break ;
 		default:
 			return (dispLogs(ERR_UNKNOWNMODE(client.getNickname()), client.getSocket()));
 	}
+	return (mode_show(client, *channel->second));
 }

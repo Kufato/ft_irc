@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/11 17:15:08 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/12 16:37:44 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 void			newSignal(int signum);
 bool			checkCharacters(std::string s);
 void			dispLogs(std::string str, int clientFD);
+std::string 	itoa(int n);
 bool			checkFormat(std::vector<std::string> cmd, Client client, int l, int u);
 std::string		concatString(std::vector<std::string> cmd);
 

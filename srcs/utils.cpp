@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/27 14:14:51 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/12 16:38:03 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,18 @@ Channel	*Server::searchNameChannel(std::string name) {
 */
 void	dispLogs(std::string str, int clientFD) {
 	send(clientFD, str.c_str(), str.length(), 0);
+}
+
+/**
+ * Classic itoa bcz it doesn't exist in c++98 :(
+ * 
+ * @param n the int to convert
+ * @return the converted string
+*/
+std::string itoa(int n) {
+	char buffer[20];
+	std::sprintf(buffer, "%d", n);
+	return std::string(buffer);
 }
 
 /**

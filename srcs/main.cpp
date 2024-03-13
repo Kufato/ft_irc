@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:04:34 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/29 14:16:08 by ajoliet          ###   ########.fr       */
+/*   Updated: 2024/03/13 16:56:56 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ int main (int argc, char **argv) {
 		return (1);
 	}
 	try {
+		int port = atoi(argv[1]);
+		if (port < 1024 || port > 65535) {
+			std::cerr << "Error: port must be superior to 1023 and inferior to 65536";
+			return (1);
+		}
 		Server server(atoi(argv[1]), argv[2]);
 		signal(SIGINT, newSignal);
 		server.createServer();

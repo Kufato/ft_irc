@@ -271,13 +271,18 @@ void	Server::deleteEmptyChannels(void)
 {
 	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end();)
 	{
-		if (it->second->getMembers().empty())
-		{
+		if (it->second->getMembers().empty()) {
 			delete it->second;
 			std::map<std::string, Channel *>::iterator tmpit = it;
 			it++;
 			this->_listChannels.erase(tmpit);
 			continue ;
+		}
+		else if (it->second->getMembers().size() == 1) {
+			if (!it->second->getMembers().begin()->second) {
+				it->second->opClient(it->second->getMembers().begin()->first, true);
+				it->second->sendToAll(RPL_MODE(it->second->getMembers().begin()->first->getNickname(), it->second->getName(), "+o", it->second->getMembers().begin()->first->getNickname()));
+			}
 		}
 		it++;
 	}

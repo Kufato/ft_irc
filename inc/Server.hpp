@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:01:33 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/11 16:50:22 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/12 14:51:46 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ class	Server {
 	// Commands
 		void	bot(Client &client);
 		void	help(Client &client);
+		void	mode_show(Client &client, Channel &channel);
 		void	nick(Client &client, std::vector<std::string> cmd);
 		void	user(Client &client, std::vector<std::string> cmd);
 		void	pass(Client &client, std::vector<std::string> cmd);
@@ -61,10 +62,10 @@ class	Server {
 		void	privmsg(Client &client, std::vector<std::string> cmd);
 		void	bot_msg(Client &client, Client &bot, std::vector<std::string> cmd);
 		void	mode_i(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
-		void	mode_t(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 		void	mode_k(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
-		void	mode_o(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 		void	mode_l(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
+		void	mode_o(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
+		void	mode_t(bool newmode, Client &client, std::vector<std::string> cmd, std::map<std::string, Channel *>::iterator	channel);
 	
 	// Signals
 		void	newSignal(int signum);

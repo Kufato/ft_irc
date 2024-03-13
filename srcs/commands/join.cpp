@@ -6,7 +6,7 @@
 /*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:09:30 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/11 18:15:06 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/03/12 11:51:50 by gbertet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 	if (checkFormat(cmd, client, 2, 3))
 		return ;
 	if (cmd[1][0] != '#')
+		return (dispLogs(ERR_BADCHARCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
+	if (!checkCharacters(cmd[1].substr(1, cmd[1].length() - 1)))
 		return (dispLogs(ERR_BADCHARCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
 	if (!searchNameChannel(cmd[1])) {
 		if (cmd.size() == 3)
@@ -51,11 +53,7 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 			return (dispLogs(ERR_CHANNELISFULL(client.getNickname(), cmd[1]), client.getSocket()));
 	}
 	if (it != listInvitations.end())
-	{
-		std::cout << "Erasing " << client.getNickname() << "'s invitation to " << channel->second->getName() << " [" << client.getListInvitation().size() << "]" << std::endl;
 		listInvitations.erase(it);
-		std::cout << "Erased ! [" << client.getListInvitation().size() << "]";
-	}
 	channel->second->addClient(&client);
 	dispLogs(RPL_JOIN(client.getNickname(), cmd[1]), client.getSocket());
 	channel->second->sendToAll(channel->second->namReplyMsg(client));
