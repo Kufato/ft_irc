@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:00:09 by axcallet          #+#    #+#             */
-/*   Updated: 2024/02/22 14:28:03 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/18 14:59:24 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class	Client {
 		int							_socket;
 		bool						_logged;
 		bool						_registered;
+		std::string					_cmdBuffer;
 		std::string					_username;
 		std::string					_nickname;
 		std::vector<std::string>	_listInvitations;
@@ -38,11 +39,13 @@ class	Client {
 		bool						isRegistered(void) { return (this->_registered); }
 		std::string					getNickname(void) { return (this->_nickname); }
 		std::string					getUsername(void) { return (this->_username); }
+		std::string					&getBuffer(void) { return (this->_cmdBuffer); }
 		std::vector<std::string>	&getListInvitation(void) { return (this->_listInvitations); }
 
 	// Setters
 		void	setSocket(int socket){ this->_socket = socket; }
 		void	setLogged(bool logged){ this->_logged = logged; }
+		void	addBuffer(const std::string &str) { this->_cmdBuffer += str; }
 		void	setUsername(std::string username){ this->_username = username; }
 		void	setNickname(std::string nickname){ this->_nickname = nickname; }
 		void	setRegistered(bool registered){ this->_registered = registered; }

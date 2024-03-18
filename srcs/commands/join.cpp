@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:09:30 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/12 11:51:50 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/03/18 16:19:22 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void	Server::join(Client &client, std::vector<std::string> cmd) {
 		if (cmd.size() != 3 || cmd[2] != channel->second->getPassword())
 			return (dispLogs(ERR_BADCHANNELKEY(client.getNickname(), cmd[1]), client.getSocket()));
 	}
+	else if (cmd.size() == 3)
+			return (dispLogs(ERR_NOKEYCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));
 	if (channel->second->getMembers().size() != 0) {
 		if (channel->second->getClientLimit() && (int)channel->second->getMembers().size() >= channel->second->getClientLimit())
 			return (dispLogs(ERR_CHANNELISFULL(client.getNickname(), cmd[1]), client.getSocket()));

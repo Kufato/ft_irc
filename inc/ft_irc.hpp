@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/12 16:37:44 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/03/18 16:26:24 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@
 void			newSignal(int signum);
 bool			checkCharacters(std::string s);
 void			dispLogs(std::string str, int clientFD);
-std::string 	itoa(int n);
 bool			checkFormat(std::vector<std::string> cmd, Client client, int l, int u);
+std::string 	itoa(int n);
 std::string		concatString(std::vector<std::string> cmd);
 
 // #################### Defines ####################
@@ -64,13 +64,14 @@ std::string		concatString(std::vector<std::string> cmd);
 #define ERR_ERRONUSENICKNAME(client, nick)				(": 432 " + client + " " + nick + " :Erroneus nickname\r\n")
 #define ERR_ERRONUSEUSERNAME(client, user)				(client + " " + user + " :Erroneus username\r\n")
 #define ERR_ALREADYINVITED(client, channel)				(client + " " + channel + " :This user is already invite\r\n")
-#define ERR_BADCHARCHANNEL(client, channel)				(client + " " + channel + " :Channel's name must start with '#'\r\n")
+#define ERR_BADCHARCHANNEL(client, channel)				(client + " " + channel + " :Channel's name must start with '#' and have only alphanumeric numbers ( '_-' accepted)\r\n")
 #define ERR_INVITEONLYCHAN(client, channel)				(": 473 " + client + " " + channel + " :Can't join channel (+i)\r\n")
 #define ERR_CHANOPRIVSNEEDED(client, channel)			(": 482 " + client + " " + channel + " :You're not channel operator\r\n")
 #define ERR_CANNOTSENDTOCHAN(client, channel)			(": 404 " + client + " " + channel + " :Channel is restricted (+t)\r\n")
 #define ERR_CANTDESERT(client, channel)					(client + " " + channel + " :You can't desert (try Op'ing another member)\r\n")
 #define ERR_BOTNICK(client)								(client + " :You can't set your nickname to \'bot\'\r\n")
 #define ERR_BOTINVITE(client)							(client + " :You can't invite the bot to a channel (he is not allowed to have fun)\r\n")
+#define	ERR_NOKEYCHANNEL(client, channel)				(client + " : channel " + channel + " does not need a key\r\n")
 
 //PRIVMSG BUILDERS
 #define USER_MESSAGES(client, target, msg)				(":" + client + " PRIVMSG " + target + " :" +  msg + "\r\n")

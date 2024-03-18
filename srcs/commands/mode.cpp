@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:53:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/13 16:54:33 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/03/18 16:42:29 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,12 @@ void	Server::mode_show(Client &client, Channel &channel) {
 		values += " ";
 		values += channel.getPassword();
 	}
-	modes += "lo";
+	if (channel.getClientLimit())
+		modes += "l";
+	modes += "o";
 	values += " ";
-	values += itoa(channel.getClientLimit());
+	if (channel.getClientLimit())
+		values += itoa(channel.getClientLimit());
 	if (channel.isTopicRestricted())
 		modes += "t";
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), channel.getName(), modes + values), client.getSocket()));
@@ -65,6 +68,7 @@ void	Server::mode_l(bool newmode, Client &client, std::vector<std::string> cmd, 
 		channel->second->sendToAll(RPL_MODE(client.getNickname(), channel->second->getName(), cmd[2], ""));
 	}
 	else {
+		std::cout << cmd.size() << std::endl;
 		if (cmd.size() < 4)
 			return (dispLogs(ERR_NEEDMOREPARAMS(client.getNickname(), concatString(cmd)), client.getSocket()));
 		int limit = atoi(cmd[3].c_str());

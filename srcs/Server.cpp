@@ -144,29 +144,30 @@ void	Server::handleClient(int clientSocket) {
 	int					bytesRead;
 	char				buff[2048];
 	std::string			request;
-	static std::string	strBuff = "";
 
 	std::map<int, Client*>::iterator	it = _listClients.find(clientSocket);
+	if (it == _listClients.end())
+		return ;
 	Client								*client = it->second;
 	
 	memset(&buff, 0, sizeof(buff));
 	bytesRead = recv(clientSocket, buff, sizeof(buff), 0);
 	if (bytesRead <= 0) {
 		if (!bytesRead)
-			removeClient(client);  
-		// else
-		// 	std::cerr << "Error receiving data from client. " << clientSocket << " " << _serverSocket << std::endl;
+		{
+			removeClient(client);
+			return ;
+		}
 	}
-	strBuff += buff;
-	while (strBuff.find_first_not_of("\n\r") != std::string::npos)
-	{
-		size_t end = strBuff.find_first_of("\n\r");
+	client->addBuffer(buff);
+	while (client->getBuffer().find_first_not_of("\n\r") != std::string::npos) {
+		size_t end = client->getBuffer().find_first_of("\n\r");
 		if (end != std::string::npos) {
-			request = strBuff.substr(0, end);
-			strBuff = strBuff.substr(end + 1, strBuff.length() - request.length()); 
+			request = client->getBuffer().substr(0, end);
+			client->addBuffer(client->getBuffer().substr(end + 1, client->getBuffer().length() - request.length())); 
 			std::cout << "Received : " << request << std::endl;
-			std::cout << "Rest : " << strBuff << std::endl;
 			client->setSocket(clientSocket);
+			client->getBuffer().clear();
 			this->handleRequest(*client, request);
 		}
 		else
@@ -259,8 +260,11 @@ void Server::removeClient(Client *client) {
 		it->second->sendToAll(RPL_PART(client->getNickname(), it->second->getName()));
 	}
 	std::map<int, Client *>::iterator it = this->_listClients.find(client->getSocket());
-	this->_listClients.erase(it);
-	delete client;
+	if (it != this->_listClients.end())
+	{
+		this->_listClients.erase(it);
+		delete client;
+	}
 	this->deleteEmptyChannels();
 }
 
@@ -269,8 +273,7 @@ void Server::removeClient(Client *client) {
 */
 void	Server::deleteEmptyChannels(void)
 {
-	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end();)
-	{
+	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end();) {
 		if (it->second->getMembers().empty()) {
 			delete it->second;
 			std::map<std::string, Channel *>::iterator tmpit = it;
@@ -294,8 +297,7 @@ void	Server::deleteEmptyChannels(void)
 void	Server::showChannels(void)
 {
 	std::cout << "Names of all the current channels:" << std::endl;
-	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end(); it++)
-	{
+	for (std::map<std::string, Channel *>::iterator it = this->_listChannels.begin(); it != this->_listChannels.end(); it++) {
 		std::cout << it->second->getName() << std::endl;
 		it->second->showMembers();
 	}
