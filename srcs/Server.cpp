@@ -164,10 +164,9 @@ void	Server::handleClient(int clientSocket) {
 		size_t end = client->getBuffer().find_first_of("\n\r");
 		if (end != std::string::npos) {
 			request = client->getBuffer().substr(0, end);
-			client->addBuffer(client->getBuffer().substr(end + 1, client->getBuffer().length() - request.length())); 
+			client->setBuffer(client->getBuffer().substr(end + 1, client->getBuffer().length() - request.length())); 
 			std::cout << "Received : " << request << std::endl;
 			client->setSocket(clientSocket);
-			client->getBuffer().clear();
 			if (this->handleRequest(*client, request) == 1)
 				break;
 		}
