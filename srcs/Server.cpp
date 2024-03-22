@@ -280,7 +280,6 @@ void Server::removeClient(Client *client) {
 	std::map<int, Client *>::iterator it = this->_listClients.find(client->getSocket());
 	if (it != this->_listClients.end())
 	{
-		Client *clientaddr = it->second;
 		this->_listClients.erase(it);
 		delete client;
 	}
