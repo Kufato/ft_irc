@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:33:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/12 16:38:03 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/03/22 09:49:46 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ std::string		concatString(std::vector<std::string> cmd)
 }
 
 /**
- * Check if the number of arguments is within the u and o range. If not, send
+ * Check if the number of arguments is within the @param l and @param u range. If not, send
  * ERR_NEEDMOREPARAMS or ERR_TOOMUCHPARAMS to the client sending the command
  *
  * @param cmd the command to check

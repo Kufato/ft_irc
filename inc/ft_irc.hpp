@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:07:38 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/18 16:26:24 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/22 09:46:43 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,18 +88,18 @@ std::string		concatString(std::vector<std::string> cmd);
 #define RPL_INVITERCVR(client, invitee, channel)		(":" + client + " INVITE " + invitee + " " + channel + "\r\n")
 #define RPL_INVITESNDR(client, invitee, channel)		(": 341 " + client + " " + invitee + " " + channel + "\r\n")
 #define RPL_KICK(client, channel, target, reason)		(":" + client + " KICK " + channel + " " + target + " :" + reason + "\r\n")
-#define RPL_HELP										"Here is the list of all available commands :\r\n \
-														PASS : use it when you need to log and enter the password\r\n \
-														NICK : set a new NickName\r\n \
-														USER : set a new UserName\r\n \
-														KICK : eject a client from the channel\r\n \
-														INVITE : invite a client to a channel\r\n \
-														TOPIC : change or view the channel topic\r\n \
-														PRIVMSG : send a private message\r\n \
-														JOIN : joins a channel\r\n \
-														MODE : change the channel's mode\r\n 	\
-														i: set/remove invite only channel\r\n 	\
-														t: set/remove the restrictions of the TOPIC command to channel operators\r\n 	\
-														k: set/remove the channel key (password)\r\n 	\
-														o: give/take channel operator privilege\r\n 	\
-														l: set/remove the user limit to channel\r\n"
+#define RPL_HELP "Here is the list of all available commands :\r\n\
+PASS : use it when you need to log and enter the password\r\n\
+NICK : set a new NickName\r\n\
+USER : set a new UserName\r\n\
+KICK : eject a client from the channel\r\n\
+INVITE : invite a client to a channel\r\n\
+TOPIC : change or view the channel topic\r\n\
+PRIVMSG : send a private message\r\n\
+JOIN : joins a channel\r\n\
+MODE : change the channel's mode\r\n\
+i: set/remove invite only channel\r\n\
+t: set/remove the restrictions of the TOPIC command to channel operators\r\n\
+k: set/remove the channel key (password)\r\n\
+o: give/take channel operator privilege\r\n\
+l: set/remove the user limit to channel\r\n"

@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 11:21:42 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/18 16:30:45 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/22 09:37:00 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	Server::kick(Client &client, std::vector<std::string> cmd) {
 		dispLogs(RPL_PART(cmd[2], cmd[1]), client.getSocket());
 		return ;
 	}
-		return (dispLogs(ERR_AUTOKICK(client.getNickname(), cmd[1]), client.getSocket()));
 	std::vector<std::pair<Client *, bool> >::iterator ope = channel->second->findMember(client.getNickname());
 	if (ope == channel->second->getMembers().end())
 		return (dispLogs(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]), client.getSocket()));

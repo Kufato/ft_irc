@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 10:53:16 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/18 16:42:29 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/22 09:38:36 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,14 @@ void	Server::mode_show(Client &client, Channel &channel) {
 		values += " ";
 		values += channel.getPassword();
 	}
-	if (channel.getClientLimit())
+	if (channel.getClientLimit()) {
 		modes += "l";
-	modes += "o";
-	values += " ";
-	if (channel.getClientLimit())
+		values += " ";
 		values += itoa(channel.getClientLimit());
+	}
+	std::vector<std::pair<Client *, bool> >::iterator clientTmp = channel.findMember(client.getNickname());
+	if (clientTmp->second)
+		modes += "o";
 	if (channel.isTopicRestricted())
 		modes += "t";
 	return (dispLogs(RPL_CHANNELMODEIS(client.getNickname(), channel.getName(), modes + values), client.getSocket()));

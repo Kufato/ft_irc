@@ -6,7 +6,7 @@
 /*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:00:09 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/18 14:59:24 by axcallet         ###   ########.fr       */
+/*   Updated: 2024/03/22 10:35:41 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ class	Client {
 		void	setSocket(int socket){ this->_socket = socket; }
 		void	setLogged(bool logged){ this->_logged = logged; }
 		void	addBuffer(const std::string &str) { this->_cmdBuffer += str; }
+		void	setBuffer(const std::string &str) { _cmdBuffer = str; }
 		void	setUsername(std::string username){ this->_username = username; }
 		void	setNickname(std::string nickname){ this->_nickname = nickname; }
 		void	setRegistered(bool registered){ this->_registered = registered; }

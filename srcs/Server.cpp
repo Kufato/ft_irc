@@ -201,9 +201,9 @@ void	Server::handleRequest(Client &client, std::string request)
 			break;
 	}
 	if (i > 1 && !client.isLogged())
-		return (dispLogs("  Register by using the command PASS <password>\r\n", client.getSocket()));
+		return (dispLogs("Register by using the command PASS <password>\r\n", client.getSocket()));
 	if (i > 3 && !client.isRegistered())
-		return (dispLogs("	Log in by using NICK <nicname> and USER <username>\r\n", client.getSocket()));
+		return (dispLogs("Log in by using NICK <nicname> and USER <username>\r\n", client.getSocket()));
 	switch (i) {
 		case 0:
 			return (this->pass(client, cmd));
