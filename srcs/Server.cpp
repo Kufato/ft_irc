@@ -160,7 +160,7 @@ void	Server::handleClient(int clientSocket) {
 		}
 	}
 	client->addBuffer(buff);
-	while (client->getBuffer().find_first_not_of("\n\r") != std::string::npos) {
+	while (client && client->getBuffer().find_first_not_of("\n\r") != std::string::npos) {
 		size_t end = client->getBuffer().find_first_of("\n\r");
 		if (end != std::string::npos) {
 			request = client->getBuffer().substr(0, end);
@@ -168,7 +168,8 @@ void	Server::handleClient(int clientSocket) {
 			std::cout << "Received : " << request << std::endl;
 			client->setSocket(clientSocket);
 			client->getBuffer().clear();
-			this->handleRequest(*client, request);
+			if (this->handleRequest(*client, request) == 1)
+				break;
 		}
 		else
 			break;
@@ -182,12 +183,12 @@ void	Server::handleClient(int clientSocket) {
  * @param client the client who sent the request.
  * @param request the data sent by the client.
 */
-void	Server::handleRequest(Client &client, std::string request)
+int	Server::handleRequest(Client &client, std::string request)
 {
 	std::vector<std::string> cmd = this->splitRequest(request);
 	unsigned int vecSize = cmd.size();
 	if (!vecSize)
-		return ;
+		return (0);
 	std::cout << "Splitted request (" << vecSize << ") : ";
 	for(unsigned int i = 0; i < vecSize; i++) {
 		if (!cmd[i].empty())
@@ -200,39 +201,56 @@ void	Server::handleRequest(Client &client, std::string request)
 		if (cmd[0] == commands[i])
 			break;
 	}
-	if (i > 1 && !client.isLogged())
-		return (dispLogs("Register by using the command PASS <password>\r\n", client.getSocket()));
-	if (i > 3 && !client.isRegistered())
-		return (dispLogs("Log in by using NICK <nicname> and USER <username>\r\n", client.getSocket()));
+	if (i > 1 && !client.isLogged()) {
+		dispLogs("Register by using the command PASS <password>\r\n", client.getSocket());
+		return (0);
+	}
+	if (i > 3 && !client.isRegistered()) {
+		dispLogs("Log in by using NICK <nicname> and USER <username>\r\n", client.getSocket());
+		return (0);
+	}
 	switch (i) {
 		case 0:
-			return (this->pass(client, cmd));
+			this->pass(client, cmd);
+			return (0);
 		case 1:
-			return (this->removeClient(&client)); 
+			this->removeClient(&client);
+			return (1);
 		case 2:
-			return (this->nick(client, cmd));
+			this->nick(client, cmd);
+			return (0);
 		case 3:
-			return (this->user(client, cmd));
+			this->user(client, cmd);
+			return (0);
 		case 4:
-			return (this->kick(client, cmd));
+			this->kick(client, cmd);
+			return (0);
 		case 5:
-			return (this->invite(client, cmd));
+			this->invite(client, cmd);
+			return (0);
 		case 6:
-			return (this->topic(client, cmd));
+			this->topic(client, cmd);
+			return (0);
 		case 7:
-			return (this->mode(client, cmd));
+			this->mode(client, cmd);
+			return (0);
 		case 8:
-			return (this->privmsg(client, cmd));
+			this->privmsg(client, cmd);
+			return (0);
 		case 9:
-			return (this->join(client, cmd));
+			this->join(client, cmd);
+			return (0);
 		case 10:
-			return (this->help(client));
+			this->help(client);
+			return (0);
 		case 11:
-			return ;
+			return (0);
 		case 12:
-			return (this->bot(client));
+			this->bot(client);
+			return (0);
 	}
-	return (dispLogs(ERR_CMDNOTFOUND(client.getNickname()), client.getSocket()));
+	dispLogs(ERR_CMDNOTFOUND(client.getNickname()), client.getSocket());
+	return (0);
 }
 
 /**
@@ -262,6 +280,7 @@ void Server::removeClient(Client *client) {
 	std::map<int, Client *>::iterator it = this->_listClients.find(client->getSocket());
 	if (it != this->_listClients.end())
 	{
+		Client *clientaddr = it->second;
 		this->_listClients.erase(it);
 		delete client;
 	}

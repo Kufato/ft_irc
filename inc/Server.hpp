@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbertet <gbertet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: axcallet <axcallet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 17:01:33 by axcallet          #+#    #+#             */
-/*   Updated: 2024/03/12 14:51:46 by gbertet          ###   ########.fr       */
+/*   Updated: 2024/03/22 11:12:50 by axcallet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class	Server {
 		~Server(void); 
 	
 	// Public methods
+		int							handleRequest(Client &client, std::string request);
 		void						lauchServer(void);
 		void						showChannels(void);
 		void						createServer(void);
@@ -44,7 +45,6 @@ class	Server {
 		void						deleteEmptyChannels(void);
 		void						removeClient(Client *client);
 		void						handleClient(int clientSocket);
-		void						handleRequest(Client &client, std::string request);
 		std::vector<std::string>	splitRequest(std::string request);
 	
 	// Commands
